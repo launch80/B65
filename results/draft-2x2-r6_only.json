@@ -1,0 +1,15 @@
+{
+ "label": "r6 only",
+ "m1": 0,
+ "r6": 1,
+ "k": 6,
+ "drafts": 442.0,
+ "drafted": 2652.0,
+ "accepted": 997.0,
+ "acceptance": 0.3759426847662142,
+ "tokens_per_step": 3.255656108597285,
+ "draft_gb": 0.9359999999999999,
+ "gb_step": 19.305,
+ "gb_per_token": 5.929680333564976,
+ "observed_tok_s": 59.68399473470734
+}

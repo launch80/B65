@@ -1,0 +1,15 @@
+{
+ "label": "m1+r6 (current)",
+ "m1": 1,
+ "r6": 1,
+ "k": 6,
+ "drafts": 451.0,
+ "drafted": 2706.0,
+ "accepted": 988.0,
+ "acceptance": 0.36511456023651145,
+ "tokens_per_step": 3.190687361419069,
+ "draft_gb": 0.306,
+ "gb_step": 15.525,
+ "gb_per_token": 4.865722724113968,
+ "observed_tok_s": 70.57703096979557
+}
