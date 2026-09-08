@@ -36,9 +36,12 @@ using half2_t = sycl::vec<half_t, 2>;
 using v4_t = sycl::vec<int32_t, 4>;
 using h8_t = sycl::vec<half_t, 8>;
 
-template <int SG, int SGS, int NCOL> class W4Kernel;
+template <int SG, int SGS, int NCOL, int MODE> class W4Kernel;
 
-template <int SG, int SGS, int NCOL>
+// MODE 0 = full kernel. MODE 1 = identical loads and loop structure, dequant
+// replaced by an XOR. Isolates how much of the runtime is dequant ALU rather
+// than memory - the number that decides whether a native dp4a is worth chasing.
+template <int SG, int SGS, int NCOL, int MODE>
 static void launch_w4(sycl::queue &q, const half_t *x, const int32_t *qw,
                       const half_t *sc, half_t *out, int K, int N) {
     const int W  = K / 8;          // int32 words per column
@@ -48,7 +51,7 @@ static void launch_w4(sycl::queue &q, const half_t *x, const int32_t *qw,
     const size_t wg = SG * SGS, nwg = (N + cols - 1) / cols;
 
     q.submit([&](sycl::handler &h) {
-        h.parallel_for<W4Kernel<SG, SGS, NCOL>>(
+        h.parallel_for<W4Kernel<SG, SGS, NCOL, MODE>>(
             sycl::nd_range<1>(nwg * wg, wg),
             [=](sycl::nd_item<1> it) [[sycl::reqd_sub_group_size(SG)]] {
                 auto sg = it.get_sub_group();
@@ -75,6 +78,14 @@ static void launch_w4(sycl::queue &q, const half_t *x, const int32_t *qw,
                         if (n >= (size_t)N) continue;
                         const v4_t wv = *reinterpret_cast<const v4_t *>(
                             qw + n * (size_t)W + (size_t)u * 4);
+                        if constexpr (MODE == 1) {
+                            uint32_t r = 0;
+#pragma unroll
+                            for (int e = 0; e < 4; ++e)
+                                r ^= (uint32_t)wv[e] ^ sycl::bit_cast<uint32_t>(
+                                         half2_t{xv[e][0], xv[e][1]});
+                            acc[c] += (float)r * (float)sc[n * (size_t)NG + u / 4];
+                        } else {
                         half2_t s2{(half_t)0.f, (half_t)0.f};
 #pragma unroll
                         for (int e = 0; e < 4; ++e) {
@@ -89,6 +100,7 @@ static void launch_w4(sycl::queue &q, const half_t *x, const int32_t *qw,
                         }
                         acc[c] += ((float)s2[0] + (float)s2[1])
                                   * (float)sc[n * (size_t)NG + u / 4];
+                        }
                     }
                 }
 #pragma unroll
@@ -101,7 +113,7 @@ static void launch_w4(sycl::queue &q, const half_t *x, const int32_t *qw,
 }
 
 at::Tensor gemv_w4(const at::Tensor &x, const at::Tensor &qw, const at::Tensor &sc,
-                   int64_t ncol) {
+                   int64_t ncol, int64_t mode) {
     TORCH_CHECK(x.is_xpu() && qw.is_xpu() && sc.is_xpu(), "all tensors must be XPU");
     TORCH_CHECK(qw.dim() == 2 && sc.dim() == 2, "qw [N,K/8], sc [N,K/128]");
     TORCH_CHECK(qw.is_contiguous() && sc.is_contiguous(), "qw and sc must be contiguous");
@@ -115,16 +127,19 @@ at::Tensor gemv_w4(const at::Tensor &x, const at::Tensor &qw, const at::Tensor &
     const auto *scp = reinterpret_cast<const half_t *>(sc.data_ptr<at::Half>());
     auto *op        = reinterpret_cast<half_t *>(out.data_ptr<at::Half>());
     auto *qp = qw.data_ptr<int32_t>();
+#define L(NC_) do { if (mode == 1) launch_w4<32, 4, NC_, 1>(q, xp, qp, scp, op, K, N); \
+                    else            launch_w4<32, 4, NC_, 0>(q, xp, qp, scp, op, K, N); } while (0)
     switch (ncol) {
-        case 1:  launch_w4<32, 4, 1>(q, xp, qp, scp, op, K, N); break;
-        case 4:  launch_w4<32, 4, 4>(q, xp, qp, scp, op, K, N); break;
-        case 8:  launch_w4<32, 4, 8>(q, xp, qp, scp, op, K, N); break;
-        default: launch_w4<32, 4, 2>(q, xp, qp, scp, op, K, N); break;
+        case 1:  L(1); break;
+        case 4:  L(4); break;
+        case 8:  L(8); break;
+        default: L(2); break;
     }
+#undef L
     return out;
 }
 
 TORCH_LIBRARY(p608, m) {
-    m.def("gemv_w4(Tensor x, Tensor qw, Tensor sc, int ncol=2) -> Tensor");
+    m.def("gemv_w4(Tensor x, Tensor qw, Tensor sc, int ncol=2, int mode=0) -> Tensor");
 }
 TORCH_LIBRARY_IMPL(p608, XPU, m) { m.impl("gemv_w4", gemv_w4); }
