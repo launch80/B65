@@ -59,7 +59,22 @@ once by the target and k times by the draft. At k=6 that is ~12 ms of a 46 ms st
 3. **M1 and R6 need re-evaluating at k=6.** Both traded acceptance for bytes. If bytes
    were never the cost, they may be trading the thing that multiplies throughput for
    a thing that was free. Neither was re-measured after k moved from 4 to 6.
-   `research/r11_sweep.sh` runs that 2x2. (Result appended below when it lands.)
+   `research/r11_sweep.sh` runs that 2x2. **Result: M1 and R6 are both correct at k=6.**
+
+   ```
+   config             accept  tok/step  draft GB  obs tok/s
+   m1+r6 (current)     36.5%     3.19     0.306      70.6   <- best
+   m1 only             40.6%     3.44     0.875      64.8
+   r6 only             37.6%     3.26     0.936      59.7
+   neither             41.4%     3.48     1.505      56.0
+   ```
+
+   Restoring draft quality lifts acceptance (36.5 -> 41.4%) but the added bytes cost
+   more than the acceptance buys, in every combination. So the hypothesis that the
+   draft's bytes are "free" under its fixed overhead is wrong: a pass costs
+   `2.53 ms + bytes/BW`, two additive terms. The byte model ranks these four exactly
+   right; it only fails on marginal *passes* (k), which is the fixed term. That is the
+   complete time model, and it closes config-level optimisation of the draft.
 4. **k=6 is right on BetterBench.** With ~77% conditional acceptance and a 2.5 ms
    pass, k=4 gives 74.5 and k=6 gives 76.8 tok/s. k=4 only wins on low-acceptance
    workloads.
@@ -115,7 +130,7 @@ From 77.2, 85 needs +10.1%. Levers, measured:
 | lever | size | status |
 |---|---|---|
 | capture off | +2% | **shipped** |
-| M1/R6 re-evaluation at k=6 | unknown, real mechanism | see below |
+| M1/R6 re-evaluation at k=6 | **0 — current config is optimal** | closed (2x2 above) |
 | W4A16 kernel (`kernel/w4_l80.cpp`) | +1.5% | built, unwired |
 | k | 0 - k=6 is right | closed |
 | draft per-forward fixed cost | ~26% of step | vLLM internals; days |
