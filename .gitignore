@@ -1,7 +1,13 @@
+# local secrets - never commit
+.env
+.env.*
+credentials.json
+
 __pycache__/
 *.pyc
 .venv/
 capture/
+act/
 *.pt
 *.safetensors
 *.parquet

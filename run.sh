@@ -20,8 +20,7 @@ UTIL="${UTIL:-0.88}"
 # "exceeds available Mamba cache blocks". 32 is a safe serving value; use 1 for
 # single-stream benchmarking.
 MAX_SEQS="${MAX_SEQS:-32}"
-SPEC="${SPEC:-6}"
-DRAFT_VOCAB="${DRAFT_VOCAB:-32768}"   # draft reads only the first N vocab rows; 0 = off
+SPEC="${SPEC:-4}"
 LMHEAD_INT4="${LMHEAD_INT4:-1}"
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -66,5 +65,4 @@ exec docker run --rm --name "$NAME" "${DEVFLAGS[@]}" --ipc=host \
   -e ZE_FLAT_DEVICE_HIERARCHY=COMPOSITE -e ZE_AFFINITY_MASK="${ZE_AFFINITY_MASK:-0}" \
   -e VLLM_XPU_ENABLE_XPU_GRAPH=1 -e PYTORCH_ALLOC_CONF=expandable_segments:True \
   -e "P608_R3_LMHEAD_INT4=$LMHEAD_INT4" \
-  -e "P608_DRAFT_VOCAB=$DRAFT_VOCAB" \
   --entrypoint bash "$IMAGE" -lc "set -e; ${PATCHES}; exec $(printf '%q ' "${ARGS[@]}")"

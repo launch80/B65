@@ -1,0 +1,17 @@
+# vLLM XPU image + Intel DPC++ compiler.
+# Building on the vLLM image rather than a clean Ubuntu means the Level Zero
+# runtime, the GPU driver userspace and the exact device stack are already the
+# ones our measurements were taken on - so a SYCL number here is comparable to
+# the vendor kernel number without qualification.
+FROM vllm/vllm-openai-xpu@sha256:f01e24f6c7ff01f1e0662234255a1372297d1dbd89d003cf13c8fad3eab1ba4f
+
+USER root
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        wget gpg ca-certificates \
+ && wget -qO- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
+      | gpg --dearmor -o /usr/share/keyrings/oneapi-archive-keyring.gpg \
+ && echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" \
+      > /etc/apt/sources.list.d/oneAPI.list \
+ && apt-get update \
+ && apt-get install -y --no-install-recommends intel-oneapi-compiler-dpcpp-cpp \
+ && rm -rf /var/lib/apt/lists/*
