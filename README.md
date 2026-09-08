@@ -20,6 +20,11 @@ sit ~99.7% idle. So making the model *read less* is the only thing that helps.
 Measured with [BetterBench](https://github.com/GGZ14/BetterBench), decode-only, greedy.
 Raw runs in [`results/`](results/).
 
+**Never seen this before?** There's a
+[visual walkthrough of one decode step](https://claude.ai/code/artifact/3198c44b-1f6d-48bc-8831-a2be8657f47d)
+— press play and watch both machines make the same trip to memory, and see how many words
+each one comes back with.
+
 ## Quick start
 
 ```sh
