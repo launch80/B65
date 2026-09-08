@@ -24,10 +24,6 @@ Raw runs in [`results/`](results/). The last row is measured on the fixed worklo
 [`bench/draft_accept.py`](bench/draft_accept.py), not yet on BetterBench, so it carries a
 tilde.
 
-**Never seen this before?** There's a
-[visual walkthrough of one decode step](https://claude.ai/code/artifact/3198c44b-1f6d-48bc-8831-a2be8657f47d)
-— press play and watch both machines make the same trip to memory.
-
 ## What is happening right now (2026-09-08)
 
 **We are publishing a baked checkpoint.** Today the INT4 `lm_head` and the INT4 MTP draft
