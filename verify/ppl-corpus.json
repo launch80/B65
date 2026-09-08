@@ -1,0 +1,232 @@
+[
+ {
+  "source": "betterbench/chat",
+  "id": "chat-followup",
+  "text": "I'm planning a 3-day trip to Lisbon in October. I like food and walking, not museums.\nGreat choice \u2014 Lisbon in October is mild and walkable. I can build you a food-and-neighborhoods itinerary. Do you want to include a day trip to Sintra?\nYes, include Sintra on day 2. Give me the day 2 plan only."
+ },
+ {
+  "source": "betterbench/chat",
+  "id": "chat-clarify",
+  "text": "Recommend a lightweight Python web framework.\nFor lightweight, FastAPI and Flask are the top picks. FastAPI gives async and automatic docs; Flask is simpler and very stable. What matters more to you: async performance or minimal learning curve?\nMinimal learning curve, and I want to serve a small JSON API."
+ },
+ {
+  "source": "betterbench/chat",
+  "id": "chat-medium",
+  "text": "Explain what a race condition is.\nA race condition happens when the correctness of a program depends on the timing or interleaving of concurrent operations \u2014 two threads read-modify-write shared state and the final result depends on who wins the 'race'.\nShow me a concrete example in Python with threads, then the fixed version using a lock."
+ },
+ {
+  "source": "betterbench/code",
+  "id": "code-gen-medium",
+  "text": "Write a Python function `merge_intervals(intervals)` that merges overlapping closed intervals given as a list of [start, end] pairs and returns the merged list sorted by start. Include a short docstring and 3 example assertions."
+ },
+ {
+  "source": "betterbench/code",
+  "id": "code-debug-medium",
+  "text": "This Python function is supposed to return the second-largest unique value but has bugs. Find and fix them, and explain the fixes briefly:\n\ndef second_largest(nums):\n    nums = sorted(nums)\n    return nums[-2]"
+ },
+ {
+  "source": "betterbench/code",
+  "id": "code-sql-short",
+  "text": "Given tables orders(id, customer_id, total, created_at) and customers(id, name), write a SQL query returning the top 5 customers by total spend in 2025, with their name and summed spend, highest first."
+ },
+ {
+  "source": "betterbench/code",
+  "id": "code-rust-long",
+  "text": "Implement a small LRU cache in Rust with `get(&mut self, key)` and `put(&mut self, key, value)`, capacity fixed at construction, O(1) average operations. Use std only. Include a `#[cfg(test)]` module with two tests."
+ },
+ {
+  "source": "betterbench/file_edit",
+  "id": "edit-refactor-medium",
+  "text": "Apply this change and return a unified diff only. In the file below, rename the function `calc` to `compute_total`, add a docstring, and guard against an empty list (return 0.0).\n\n```python\ndef calc(items):\n    t = 0\n    for i in items:\n        t += i['price'] * i['qty']\n    return t\n```"
+ },
+ {
+  "source": "betterbench/file_edit",
+  "id": "edit-searchreplace-short",
+  "text": "Return ONLY a single search/replace block (SEARCH: ... REPLACE: ...) that changes the timeout from 30 to 120 and adds `retries=3` to this call:\n\nresp = client.get(url, timeout=30)"
+ },
+ {
+  "source": "betterbench/file_edit",
+  "id": "edit-bigfile-long",
+  "text": "Below is a config module. Add a new boolean option `enable_cache` defaulting to True, wire it into the `Settings` dataclass, and update `load()` to read it from the dict. Return a unified diff only.\n\n```python\nfrom dataclasses import dataclass\n\n@dataclass\nclass Settings:\n    host: str = 'localhost'\n    port: int = 8080\n    max_conns: int = 64\n\ndef load(d):\n    return Settings(host=d.get('host','localhost'), port=int(d.get('port',8080)), max_conns=int(d.get('max_conns',64)))\n```"
+ },
+ {
+  "source": "betterbench/json",
+  "id": "json-extract-short",
+  "text": "Extract structured data from this text and return ONLY a JSON object with keys name, role, company, city, years_experience:\n\n\"Priya Raman is a senior platform engineer at Nimbus Data in Austin. She's been building distributed systems for about nine years.\""
+ },
+ {
+  "source": "betterbench/json",
+  "id": "json-schema-medium",
+  "text": "Generate a JSON array of 6 fictional product catalog entries. Each object must have: sku (string), name, price_usd (number), in_stock (boolean), tags (array of 2-3 strings). Return ONLY valid JSON, no prose."
+ },
+ {
+  "source": "betterbench/json",
+  "id": "json-transform-medium",
+  "text": "Convert this CSV to a JSON array of objects (infer types; numbers as numbers). Return ONLY JSON:\n\nid,name,score,active\n1,alpha,88.5,true\n2,beta,73,false\n3,gamma,91.2,true"
+ },
+ {
+  "source": "betterbench/json",
+  "id": "json-toolcall-short",
+  "text": "Produce a single JSON object representing a function call to `create_calendar_event` with arguments title, date (ISO), start_time, duration_minutes, for: 'Set up a 45-minute design review next Tuesday at 2pm.' Assume today is 2026-03-02. Return ONLY the JSON."
+ },
+ {
+  "source": "betterbench/math",
+  "id": "math-word-medium",
+  "text": "A tank fills through pipe A in 6 hours and pipe B in 9 hours, and drains through pipe C in 12 hours. If all three run at once starting from empty, how long to fill the tank? Show the work."
+ },
+ {
+  "source": "betterbench/math",
+  "id": "math-multistep-long",
+  "text": "Three friends split a restaurant bill. The total before tax is $84. Tax is 8.25%. They add a 20% tip on the pre-tax amount. Alice had $12 more of food than Bob; Carla had twice Bob's food amount. Work out each person's food cost, then each person's final share including tax and tip, showing all steps."
+ },
+ {
+  "source": "betterbench/prose",
+  "id": "prose-story-long",
+  "text": "Write a 700-word short story about a lighthouse keeper who discovers the light has started answering back. Literary, restrained, no dialogue tags beyond 'said'."
+ },
+ {
+  "source": "betterbench/prose",
+  "id": "prose-continue-medium",
+  "text": "Continue this passage in the same voice for about 400 words:\n\nThe train did not so much arrive as concede the station, exhaling a long mechanical sigh as though it too were tired of the journey. Marren stepped down onto a platform the color of old teeth."
+ },
+ {
+  "source": "betterbench/prose",
+  "id": "prose-style-edit",
+  "text": "Rewrite this paragraph in the terse, punchy style of hardboiled detective fiction, keeping the facts: 'It was a pleasant afternoon and I decided, after some deliberation, that I would walk down to the small cafe on the corner to enjoy a coffee and perhaps read the newspaper for a while.'"
+ },
+ {
+  "source": "betterbench/reasoning",
+  "id": "reason-plan-medium",
+  "text": "A team of 4 must cross a river in a canoe that holds at most 2 people and must always be paddled back by someone. Crossing times differ: 1, 2, 5, 10 minutes; a pair moves at the slower person's pace. Find the minimum total time, then explain the reasoning step by step."
+ },
+ {
+  "source": "betterbench/reasoning",
+  "id": "reason-causal-medium",
+  "text": "A shop's sales rose 20% the month after it repainted its storefront. List the most plausible alternative explanations besides the paint causing the rise, and describe one experiment that would isolate the paint's true effect."
+ },
+ {
+  "source": "betterbench/reasoning",
+  "id": "reason-longform",
+  "text": "Explain, for a smart non-expert, why adding more lanes to a highway often fails to reduce congestion in the long run. Cover induced demand, the fundamental law of road congestion, and one policy that works better. Aim for ~600 words."
+ },
+ {
+  "source": "betterbench/reasoning",
+  "id": "reason-quick",
+  "text": "If all Bloops are Razzies and all Razzies are Lazzies, are all Bloops definitely Lazzies? Answer yes or no and give one sentence of justification."
+ },
+ {
+  "source": "betterbench/summarization",
+  "id": "summ-short-out",
+  "text": "Summarize the following in exactly 3 bullet points:\n\nThe committee reviewed the quarterly infrastructure report. Cloud spend rose 14% driven mostly by a new analytics pipeline that was not decommissioned after its pilot. Storage costs were flat. The team recommended shutting down idle staging clusters overnight and moving cold logs to archival tiers, projecting a 9% reduction next quarter. A follow-up audit was scheduled for the first week of the next quarter."
+ },
+ {
+  "source": "betterbench/summarization",
+  "id": "summ-tldr",
+  "text": "Give a one-sentence TL;DR of this: A new study followed 2,000 remote workers over two years and found that those with a fixed daily start time reported lower burnout and higher output than those with fully flexible hours, though the flexible group reported higher day-to-day satisfaction."
+ },
+ {
+  "source": "betterbench/summarization",
+  "id": "summ-keypoints-medium",
+  "text": "Read the passage and produce a structured summary with sections 'Problem', 'Approach', 'Result', 'Caveats'.\n\nA regional hospital network struggled with long emergency-room wait times. They piloted a triage change that routed low-acuity patients to a parallel fast-track staffed by nurse practitioners, while keeping the main track for higher-acuity cases. Over six months, median wait times fell 31% and left-without-being-seen rates dropped by half. However, the fast-track required hiring two additional nurse practitioners, and one month showed a regression during a staffing shortage, suggesting the gains depend heavily on consistent staffing. Patient satisfaction scores rose overall, but a small subset of patients rerouted to fast-track felt their concerns were minimized."
+ },
+ {
+  "source": "prose/cookbook",
+  "id": "DRAFT-INT4-S-M1.md#0",
+  "text": "# Qwen3.8-27B \u2014 Draft INT4 (S + M1)\n\nRuntime patches that **requantize the speculative-draft side** of MTP to\nINT4 g128 symmetric (round-to-nearest, not Hessian GPTQ) and route those\nlinears through `torch.ops._xpu_C.int4_gemm_w4a16`.\n\nProduction image: `vllm/vllm-openai-xpu@sha256:f01e24f6c7ff01f1e0662234255a1372297d1dbd89d003cf13c8fad3eab1ba4f`\n(vLLM `0.27.2rc1.dev77+gac7509e2b`, kernels `0.1.12.3`). The patches fail\nclosed if `qwen3_5_mtp.py` anchors differ - and that guard is anchor-only:\nit knows nothing about topology, so it does not protect TP>1.\n\n> **Do not enable with `--tensor-parallel-size 2`.** Under TP2, target\n> verification does not protect the emitted sequence: output can be\n> corrupted or non-deterministic even at temperature 0 (issue #9). The\n> INT4 draft overlay is a single-card C1 speed keep.\n\n## What is and is not lossless\n\n| Piece | After S+M1 |\n|---|---|\n| Target body (GPTQ-INT4) | unchanged |\n| Target / verify LM head | still FP16/BF16 |\n| Draft LM head copy | runtime INT4 g128 RTN |\n| Draft MTP 5 linears | runtime INT4 g128 RTN |\n\nSingle-card C1 only: the target still verifies. Draft **logits are not**\nidentical. Acceptance can drop. This is a **speed** keep, not a\nquality-parity claim.\n\n## Same-image n=5 (2026-08-18)\n\nChampion `f01e24f6`, MTP4, cache off, MBT 8192, U=0.88, fp8 KV, C1,\nconfigured **230 W**. Timing: client post-first / input\u00f7TTFT. Sampling:\ngreedy for the 2026-08-18 n=5 tables; at the Qwen-recommended non-thinking\npreset (0.7/0.80/20/presence 1.5) the same C1 cell measures **102.61**\n(accept 91.8%) \u2014 see QWEN38-VLLM-XPU.md \u00a711. Accept from\n`vllm:spec_decode_*_total`. Raw: cookbook campaign sibling\n`qwen38-pr-n5-20260818T214749Z` + long-ctx `qwen38-pr-long-20260818T221813Z`.\n\n| Cell | BF16 draft (cookbook) | Draft INT4 S+M1 | \u0394 |"
+ },
+ {
+  "source": "prose/cookbook",
+  "id": "DRAFT-INT4-S-M1.md#1",
+  "text": "|---|---:|---:|---:|\n| p512/g128 median n=5 | 81.20 tok/s (78.76\u201381.97) | **112.65** (111.58\u2013117.73) | **+38.7%** |\n| p8192/g128 median n=5 | 77.52 | **103.63** (99.10\u2013107.70) | **+33.7%** |\n| p8192/g1 cold input | 1691.1 | 1696.0 | +0.3% (flat) |\n| short agentic 3\u00d75 g256 (**cache off**) | 43.27 | **57.45** | **+32.8%** |\n| accept p512 / p8192 | 95.86% / 96.02% | 94.44% / 94.59% | \u22121.4 pp |\n| measured median W p512 | 195.2 | 205.0 | \u2014 |\n\nLong-context C1 agentic (g128, 0 crashes, actual first prompts ~8.3K /\n~16.5K / ~32.9K): **+37%** at 8K (68.73 vs 50.06), **+26%** at 16K\n(70.86 vs 56.29). 32K was isolated C1 (~245 MiB free) and only **+5%** \u2014\nnot a serving headline.\n\nDo **not** headline +51%. That table compared a different image, patch\nlist, MBT, and cache mode (`not_comparable`).\n\nThe n=3 chat-harness screen (59.1 \u2192 83.9) used ~p530 filler, not exact\np512. It is superseded.\n\n## Generation curve + isolated C1 128K (2026-08-19, Run 42)\n\nSame S+M1 arm, same image, MTP4, cache off, C1, configured **230 W**,\n`ignore_eos`, n=5, zero prefix-cache-hit deltas. g128 Lane 1 above was\n**not** remeasured. After-load `visible_avail` = **870 MiB** \u2192 isolated\nC1 capacity only (500\u20131,023 MiB class). Mid-request free VRAM dipped to\ntens of MiB. **Not a serving or preferred-perf 128K claim.**\n\n![S+M1 generation and isolated-C1 128K](../assets/b70-qwen38-draft-int4-ctx-gen.svg)\n\n### Generation length (client post-first tok/s)\n\ng32 is not sustained. g512 is a length diagnostic, not a predeclared\nsustained window.\n\n| Cell | median | max | range | accept | median W | n |\n|---|---:|---:|---|---:|---:|--:|\n| p512/g32 | 101.57 | 102.73 | 89.59\u2013102.73 | 84.9% | 215.5 | 5 |\n| p512/g256 | 110.76 | 112.87 | 85.13\u2013112.87 | 89.0% | 195.6 | 5 |\n| p512/g512 | 101.20 | 112.71 | 73.24\u2013112.71 | 81.2% |"
+ },
+ {
+  "source": "prose/cookbook",
+  "id": "DRAFT-INT4-S-M1.md#2",
+  "text": "193.8 | 5 |\n| p8192/g32 | 93.92 | 94.64 | 82.50\u201394.64 | 86.5% | 229.1 | 5 |\n| p8192/g256 | 75.75 | 80.33 | 69.00\u201380.33 | 62.5% | 215.1 | 5 |\n| p8192/g512 | 64.96 | 72.22 | 56.81\u201372.22 | 51.6% | 206.3 | 5 |\n\n### Long-context g128 (isolated C1)\n\nAll rows exact tokens, `finish_reason=length`. p130944+g128 completed\n131,072 tokens on every rep.\n\n| Cell | median post-first | max | range | input/TTFT | accept | median W | n |\n|---|---:|---:|---|---:|---:|---:|--:|\n| p16384/g128 | 94.92 | 95.41 | 90.52\u201395.41 | 1495 | 92.6% | 226.0 | 5 |\n| p32768/g128 | 88.25 | 91.59 | 85.00\u201391.59 | 1269 | 93.8% | 227.6 | 5 |\n| p65536/g128 | 76.72 | 79.79 | 76.53\u201379.79 | 1000 | 94.8% | 228.6 | 5 |\n| p98304/g128 | 67.93 | 70.50 | 65.24\u201370.50 | 827 | 93.4% | 229.0 | 5 |\n| p130944/g128 | 62.52 | 65.57 | 58.74\u201365.57 | 708 | 92.6% | 229.1 | 5 |\n\nRaw: `B70-DOCS/results/qwen38-sm1-ctx-gen-20260819T082145Z/`. Input\ncolumn is cold input rate (prompt tokens / client TTFT), not isolated\nprefill.\n\n## Prefix-on agentic (2026-08-19, Run 43)\n\nMatched same-image A/B with **prefix caching on** (`enable_prefix_caching:\nTrue` in both server logs). C1, configured **230 W**, client post-first.\nAfter-load 865 / 871 MiB \u2192 isolated C1. Comparison:\n`matched_except_quant`. Keep the cache-off agentic table above separate.\nDo not headline prefix-on as faster decode than cache-off.\n\nClient post-first tok/s, median, C1, prefix cache on, 230 W cap configured:\n\n| Cell | Cookbook BF16 draft | Draft INT4 S+M1 | \u0394 |\n|---|---:|---:|---:|\n| short coding 3\u00d75 g256 (3 sessions, 15 turns) | 43.81 | **58.86** | **+34.4%** |\n| 8K start g128 (3 sessions, 15 turns) | 48.04 | **66.99** | **+39.4%** |\n| 16K start g128 (2 sessions, 8 turns) | 54.40 | **65.92** | **+21.2%** |\n\nShort t5 hits = 1664 tokens/session. Long t2+ hits 4992\u201318304. 0"
+ },
+ {
+  "source": "prose/cookbook",
+  "id": "QWEN38-VLLM-XPU.md#0",
+  "text": "# Qwen3.8-27B vLLM XPU 4-Mode Recipe\n\nThis page is the **single-B70 GPTQ-INT4 route**. For route selection, including\nthe separate dual-B70 FP8 W8A16 TP2 research recipe, start at the\n[Qwen3.8 family hub](README.md). Do not mix the FP8 kernel patches or FP8\nbenchmark values into this GPTQ recipe.\n\n> **Windows 11 host?** Same image digest, 100K ctx, display-safe GPU budget.\n> Kit **2026.08.19** ships draft-INT4 S+M1 with prefix cache **on** for real\n> sessions. Already on 18 August? Rebuild, do not re-download:\n> [WINDOWS-STANDALONE.md](WINDOWS-STANDALONE.md).\n\n![Dashboard SVG](../assets/b70-qwen38-dashboard.svg)\n\nThe 4-mode dashboard is the **BF16-draft** Run 40 card (MTP4 p512/g128 **83.7**).\nThe optional draft-INT4 overlay is a separate matched n=5 card:\n\n![Draft-INT4 overlay](../assets/b70-qwen38-draft-int4-overlay.svg)\n\nGeneration length + isolated-C1 128K on that same S+M1 arm (not a serving\nheadline; 870 MiB free after load):\n\n![Draft-INT4 generation and isolated C1 128K](../assets/b70-qwen38-draft-int4-ctx-gen.svg)\n\nPrefix-on agentic A/B (separate campaign, cache on, isolated C1):\n\n![Draft-INT4 prefix-on agentic](../assets/b70-qwen38-draft-int4-agentic-cacheon.svg)\n\n## Quick Start (3-Step Setup)\n\n### Step 1: Pull the image & verify environment\n\n### Step 2: Download the model\n\n### Step 3: Launch server & verify health\n\n> [!NOTE]\n> **Context & Headroom:** 100,000 tokens (`--max-model-len 100000`, `U=0.88`) provides ~1.5\u20132.0 GiB free VRAM headroom. If running full 131,072 context, keep `--gpu-memory-utilization 0.88` (leaves ~870 MiB free after load for isolated C1 runs).\n\n---\n\n## 1. Model download from Hugging Face\nDownload the exact preserved-MTP artifact using the Hugging Face CLI. The model repository contains 16 files totaling ~18.2 GiB. We pin to the `9d189a60"
+ },
+ {
+  "source": "prose/cookbook",
+  "id": "QWEN38-VLLM-XPU.md#1",
+  "text": "` revision to ensure exact replication.\n\nVerify the artifact integrity and correct exclusion of the `mtp.*` tensors from quantization (they must remain BF16):\n\nThe config must show `gptq` with 4-bit, sym=true, group_size=128, desc_act=false, and dynamically excluded `mtp.*` tensors.\n\n## 2. Why GPTQ-Int4?\nIntel's XMX engines are integer-first hardware. GPTQ-Int4 is the demonstrated optimal fast path for vLLM XPU on the B70, utilizing the `XPUwNa16LinearKernel`. Other formats fall short on this stack:\n- **NVFP4:** Proprietary to NVIDIA, unsupported on Intel silicon.\n- **FP8 block:** Currently lacks an optimized XPU scaling kernel in vLLM.\n- **GGUF:** The converter strips the required MTP head, breaking speculative decoding.\n- **AWQ / compressed-tensors:** Not proven or fully optimized on this exact stack.\n\nThis exact `sym G128 desc_act=false` contract with 400 quantized weight tensors and 15 preserved BF16 MTP tensors was quantized directly on the B70 XPU using `gptqmodel` 7.3.2 to ensure native compatibility.\n\n## 3. Image and package verification\nPull the pinned immutable container image:\n\nVerify the exact package versions and device detection inside the container:\n\nIt must print `Intel Arc Pro B70`.\n\n## 4. Patches\nRequired, in this order (both in `patches/`):\n1. `patch_mtp_nightly.py` (SHA-256: `4d7a02c4ea10ca7c00dc89ad927fa3dafa747dbf0553d2adf24e30a3c53e9c14`): Enables the BF16 draft build gate by reading `B70_MTP_BF16_DRAFT=1`.\n2. `patch_mtp_boundary.py` (SHA-256: `41d2f74e5fef1f074b76b5a90dd1016de437228431802cfb1fa7bd7ce4cc9b50`): Correctly handles the partial final speculative group at the exact 131,072-token boundary.\n\nOptional, after those two, still Qwen-only (never Nemotron grouped-topk / SSU):\n3. `patch_gdn_mixed_split_v5.py` \u2014 mixed spec + non-spec `gdn_attent"
+ },
+ {
+  "source": "prose/cookbook",
+  "id": "QWEN38-VLLM-XPU.md#2",
+  "text": "ion` compact+scatter. Cn correctness; C1 speed-flat.\n4. `patch_draft_lmhead_int4.py` then `patch_draft_mtp_int4.py` with `B70_DRAFT_LMHEAD_INT4=1` and `B70_DRAFT_MTP_INT4=1` \u2014 draft-side INT4 RTN. MTP speed overlay. Quality still gated.\n\nCopy-paste launch lines including the optional overlays: [FULL-SETUP-COMMANDS.md \u00a711](../FULL-SETUP-COMMANDS.md).\n\n## 5. Power cap\nResolve your `xe` hwmon path (PCI 0000:0b:00.0) and set the 230 W configured cap:\n\n*Note: A 300 W write is rejected by the driver; readback stays at the 230 W hardware ceiling. There is no clock control on the `xe` driver (no gt_min/gt_max). Under a 230 W cap load, the PMU reports actual frequencies of 3,400 MHz against requested 2,400 MHz.* Restore to 150 W after benchmark completion.\n\n## 6. Launch commands (isolated reference modes)\nRun the server for each mode sequentially.\n\n### no-spec\n\n### MTP1 / MTP2 / MTP4\nFor MTP runs, drop `--gpu-memory-utilization` to `0.88` to fit draft buffers, and append the speculative config. For example, MTP4:\n\n## 6b. Vision serving (full VLM)\n\nThe artifact is a `Qwen3_5ForConditionalGeneration` VLM: INT4 language\nmodel, but the 333-tensor vision tower ships **unquantized F16\n(~0.92 GB)** next to the BF16 MTP heads. Serving images is a one-flag\nchange: **remove `--language-model-only`**.\n\nVerified 2026-08-23 (image `f01e24f6`, MTP4, fp8 KV, util 0.92,\n131072 ctx): boots and answers a 64\u00d764 red-PNG smoke test with `Red`\n(+78 prompt tokens vs text-only). Budget ~1 GB extra VRAM for the\ntower; if you need that VRAM back for KV, lower util or context instead\nof re-adding the flag.\n\n> [!WARNING]\n> **The image-processor configs must exist in the model dir.** The\n> published repo ships `preprocessor_config.json`,\n> `processor_config.json` and `video_preprocessor_config.json` (presen"
+ },
+ {
+  "source": "prose/cookbook",
+  "id": "README.md#0",
+  "text": "# Qwen3.8-27B on Intel Arc Pro B70\n\nThis directory is the family hub for the distinct Qwen3.8-27B serving routes in\nthis cookbook. Choose the artifact and hardware topology first; the recipes do\nnot share a numeric authority or an interchangeable patch list.\n\n## Choose a route\n\n| Route | Hardware | Artifact and serving goal | Start here |\n|---|---|---|---|\n| GPTQ-INT4 + native MTP | One B70 | General single-card Linux serving, long context, optional draft-INT4, and the established Pi/agent path | [QWEN38-VLLM-XPU.md](QWEN38-VLLM-XPU.md) |\n| FP8 W8A16 + native MTP8 | Two B70 cards in TP2 | Research recipe for the Xe2 FP8 small-M kernel path; C1 evidence only, self-reported E2 | [FP8-TP2-W8A16.md](FP8-TP2-W8A16.md) |\n| Windows standalone | One display-attached B70 | Docker Desktop and experimental WSLC packaging with display-safe VRAM budgets | [WINDOWS-STANDALONE.md](WINDOWS-STANDALONE.md) |\n| Pi agent backend | Qwen3.8 server | Tool calling, provider configuration, and recommended thinking/non-thinking sampling | [PI-AGENT-BACKEND.md](PI-AGENT-BACKEND.md) |\n| Draft INT4 overlay | One B70 | Optional draft LM-head and MTP-linear RTN INT4 overlay for the GPTQ route | [DRAFT-INT4-S-M1.md](DRAFT-INT4-S-M1.md) |\n\n## Shared topology and compatibility references\n\n- [Dual-B70 TP2 / PP2](../DUAL-B70-TP2.md) explains worker affinity,\n  `SYS_PTRACE`, and the oneCCL simple-threshold configuration required on\n  non-P2P desktop platforms.\n- [Image and patch matrix](../IMAGE-AND-PATCH-MATRIX.md) is the compatibility\n  denylist and ordered patch reference. Do not apply GPTQ-only draft patches to\n  the FP8 target path, or FP8 W8A16 patches to GPTQ weights.\n- [Benchmark catalog](../BENCHMARK-CATALOG.md) is generated from\n  [`data/benchmarks.v1.json`](../../data/benchmarks.v1.json), the pu"
+ },
+ {
+  "source": "prose/cookbook",
+  "id": "README.md#1",
+  "text": "blic numeric\n  catalog authority.\n\n## Evidence and claim boundary\n\nThe FP8 TP2 route is an official-lab self-report at E2 with public raw evidence;\nit has not been independently reproduced. Its greedy random-token cells are\ndiagnostic maxima, while the model-card-sampling cells are sampling-sensitivity\ndiagnostics rather than natural-content quality evaluations. The GPTQ route has\nseparate evidence, sampling conditions, cache states, context limits, and\nhardware scope. Do not compare or combine numbers across the routes without a\nmatched comparison.\n\nQwen3.8-Flash-Next is a different model:\n[docs/qwen38-flash-next/](../qwen38-flash-next/README.md)."
+ },
+ {
+  "source": "prose/cookbook",
+  "id": "SOURCE.md#0",
+  "text": "# Source\n\nDownloaded 2026-09-04 from\n<https://github.com/SergiioB/intel-arc-pro-b70-inference-cookbook> (default branch is\n`master`, not `main` \u2014 `raw.githubusercontent.com/.../main/...` returns 404).\n\n| File here | Upstream path |\n|---|---|\n| `benchmarks.v1.json` | `data/benchmarks.v1.json` \u2014 **the single numeric authority** |\n| `README.md` | `docs/qwen38-27/README.md` |\n| `DRAFT-INT4-S-M1.md` | `docs/qwen38-27/DRAFT-INT4-S-M1.md` |\n| `QWEN38-VLLM-XPU.md` | `docs/qwen38-27/QWEN38-VLLM-XPU.md` |\n\nThese are **someone else's work**, kept here as a frozen reference for the comparison in\n[`../../docs/04-prior-art-b70-cookbook.md`](../../docs/04-prior-art-b70-cookbook.md). Check\nupstream before quoting \u2014 the numbers have moved before.\n\nDo not mix cells across routes; the repo is explicit about that. Prefer the catalog to any\nthread title.\n\n## This is a partial mirror\n\nOnly the four files above were downloaded. The cookbook's own markdown links to siblings that\nare **not** here \u2014 `BENCHMARK-CATALOG.md`, `IMAGE-AND-PATCH-MATRIX.md`,\n`FULL-SETUP-COMMANDS.md`, `DUAL-B70-TP2.md`, `WINDOWS-STANDALONE.md`, `PI-AGENT-BACKEND.md`,\n`qwen38-flash-next/`, and the `assets/*.svg` charts. Those dead relative links are expected,\nnot corruption. Follow them upstream."
+ },
+ {
+  "source": "code/python",
+  "id": "cli.py#0",
+  "text": "\"\"\"BetterBench command line: run \u00b7 report \u00b7 compare \u00b7 ab.\"\"\"\nfrom __future__ import annotations\n\nimport argparse\nimport asyncio\nimport json\nimport sys\nfrom pathlib import Path\n\nfrom . import CORPUS_VERSION, RESULTS_SCHEMA, __version__\nfrom .client import get_model_context\nfrom .config import Config\nfrom .corpus import load_corpus\nfrom .env import content_hash, fingerprint\nfrom .metrics import paired_compare\nfrom .html_report import render_html\nfrom .report import render_ab_markdown, render_markdown, sample_gate\nfrom .runner import concurrency_sweep, paired_ab, prefill_sweep, single_stream\n\n# `--quick` preset: a short smoke run, not a publishable measurement.\nQUICK_PASSES = 5\nQUICK_WARMUP = 1\n\ndef _kv(value: str) -> tuple[str, str]:\n    key, sep, val = value.partition(\"=\")\n    if not sep or not key.strip():\n        raise argparse.ArgumentTypeError(f\"expected KEY=VALUE, got {value!r}\")\n    return key.strip(), val.strip()\n\ndef _positive_int(value: str) -> int:\n    if not value.lstrip(\"+\").isdigit() or int(value) < 1:\n        raise argparse.ArgumentTypeError(\n            f\"expected a whole number of 1 or more, got {value!r}\")\n    return int(value)\n\ndef _non_negative_int(value: str) -> int:\n    if not value.lstrip(\"+\").isdigit():\n        raise argparse.ArgumentTypeError(\n            f\"expected a whole number of 0 or more, got {value!r}\")\n    return int(value)\n\ndef _load(cfg_path, overrides: dict) -> Config:\n    cfg = Config.load(cfg_path)\n    for k, v in overrides.items():\n        if v is not None and hasattr(cfg, k):\n            setattr(cfg, k, v)\n    return cfg\n\ndef _html_path(out: str, html_out: str | None) -> Path:\n    return Path(html_out) if html_out else Path(out).with_suffix(\".html\")\n\ndef _emit_html(results: dict, out: str, html_out: str | None, disabled: bool) -> No"
+ },
+ {
+  "source": "code/python",
+  "id": "cli.py#1",
+  "text": "ne:\n    \"\"\"Write the standalone HTML report beside the results JSON.\"\"\"\n    if disabled:\n        return\n    path = _html_path(out, html_out)\n    path.parent.mkdir(parents=True, exist_ok=True)\n    path.write_text(render_html(results), encoding=\"utf-8\")\n    print(f\"\\nwrote {path}  \u2014  open it in a browser for the charted report:\")\n    print(f\"    file://{path.resolve()}\")\n\n# The three measured phases, in the order they run: CLI selector flag -> the\n# Config field that decides whether the phase happens at all.\nPHASES = {\"decode\": \"run_single_stream\",\n          \"prefill\": \"run_prefill\",\n          \"concurrency\": \"run_concurrency\"}\n\ndef _phase_overrides(args) -> dict:\n    \"\"\"Resolve --decode / --prefill / --concurrency into Config overrides.\n\n    Naming a phase selects it and *only* it, so `--prefill` is the whole\n    command needed to re-measure prompt processing; naming several runs those\n    several. With none named, nothing here overrides the config file \u2014 the\n    older `--no-*` flags still switch a phase off, and a `run_*: false` in a\n    --config file is finally honoured instead of being overwritten.\n    \"\"\"\n    selected = set(args.only or ())\n    contradicted = [f\"--{n}\" for n in (\"prefill\", \"concurrency\")\n                    if n in selected and getattr(args, f\"no_{n}\")]\n    if contradicted:\n        sys.exit(f\"{' and '.join(contradicted)} asked for and switched off in the \"\n                 f\"same command \u2014 drop one.\")\n    if selected:\n        return {field: (name in selected) for name, field in PHASES.items()}\n    return {\"run_prefill\": False if args.no_prefill else None,\n            \"run_concurrency\": False if args.no_concurrency else None}\n\ndef cmd_run(args):\n    # --passes wins over the config file; --quick only fills in what wasn't asked\n    # for explicitly, so `"
+ },
+ {
+  "source": "code/python",
+  "id": "client.py#0",
+  "text": "\"\"\"OpenAI-compatible streaming client with high-resolution timing.\n\nStdlib-only (http.client) so BetterBench needs no HTTP dependency; concurrency\nis provided by wrapping the blocking request in asyncio.to_thread, which gives\nreal parallelism for I/O-bound token streaming.\n\nCaptures, per request:\n  * TTFT             \u2014 time from send to the first content-bearing chunk (ms)\n  * update gaps      \u2014 wall-clock gaps between stream updates (ms), as measured\n  * ITL              \u2014 per-token latency (ms), only when the server streams one\n                       token per chunk; otherwise there is nothing to report\n  * decode / total tokens-per-second\n  * prompt / completion token counts (reasoning tokens included)\n\nA note on ITL and speculative decoding. Most servers stream one token per SSE\nchunk, and then the gap between chunks *is* the inter-token latency. Servers\ndoing speculative decoding (MTP, EAGLE, Medusa, n-gram, ...) verify several\ntokens in a single forward pass and write all the accepted ones into one chunk.\nThose tokens did not arrive at different times \u2014 they arrived together, in the\nsame network write \u2014 so for tokens inside a chunk \"time between tokens\" has no\nanswer. BetterBench does not invent one: it reports the measured update gap and\nthe tokens per update instead, and leaves `itl_ms` empty.\n\"\"\"\nfrom __future__ import annotations\n\nimport asyncio\nimport http.client\nimport json\nimport time\nimport urllib.parse\nfrom dataclasses import dataclass, field\nfrom typing import Any\n\n# How far usage.completion_tokens may exceed the chunk count before we stop\n# calling a stream one-token-per-chunk. Both a ratio and an absolute slack:\n# `usage` counts tokens that never carried a delta (EOS, and on some servers a\n# role-only opening chunk), so a genuinely 1:1 stream lands one"
+ },
+ {
+  "source": "code/python",
+  "id": "client.py#1",
+  "text": "or two tokens\n# above its chunk count regardless of length \u2014 15 of 40 records in a real\n# non-speculative reference run are exactly comp == n_chunks + 1. A ratio alone\n# would pass that on a 900-token generation and fail it on a 16-token prefill\n# probe. The ratio is deliberately tight: whatever it admits is the worst-case\n# error in any per-token latency we then report, so the 10% BetterBench used\n# through 0.2.3 was ten times too loose.\nCHUNK_TOKEN_TOL = 0.02\nCHUNK_TOKEN_SLACK = 2\n\n# Servers expose the thinking phase one of two ways: a separate delta field\n# (`reasoning_content` / `reasoning`), where the channel switch is unambiguous;\n# or inline in `content` between literal markers.\n_OPEN_MARKERS = (\"<think>\", \"<thinking>\")\n_CLOSE_MARKERS = (\"</think>\", \"</thinking>\")\n_CARRY = max(len(m) for m in _OPEN_MARKERS + _CLOSE_MARKERS) - 1\n\ndef _find_marker(carry: str, text: str, markers) -> tuple[int, int] | None:\n    \"\"\"Locate the earliest marker spanning `carry + text`.\n\n    Returns (end_of_before, start_of_after) as offsets into `text`, clamped to\n    zero for the part of the marker that landed in the previous chunk. The carry\n    is why a marker split across two SSE deltas is still found.\n    \"\"\"\n    buf = carry + text\n    best = None\n    for m in markers:\n        i = buf.find(m)\n        if i >= 0 and (best is None or i < best[0]):\n            best = (i, i + len(m))\n    if best is None:\n        return None\n    off = len(carry)\n    return max(0, best[0] - off), max(0, best[1] - off)\n\n@dataclass\nclass _Timeline:\n    \"\"\"Per-chunk bookkeeping gathered while the stream is still arriving.\n\n    It only *counts*: which channel carried text, how much, and when the answer\n    first appeared. Interpreting those counts is deferred to `_resolve_split`,\n    because until the stream"
+ },
+ {
+  "source": "code/python",
+  "id": "config.py#0",
+  "text": "\"\"\"Run configuration. Defaults live here; a JSON file and CLI flags override.\"\"\"\nfrom __future__ import annotations\n\nimport json\nfrom dataclasses import dataclass, field, asdict\nfrom pathlib import Path\n\n@dataclass\nclass Config:\n    # sampling\n    temperature: float = 0.7\n    top_p: float = 0.95\n    top_k: int | None = 20\n    seed: int | None = None          # set (with greedy) for repeatability mode\n    greedy: bool = False             # temperature=0 override for tight A/B\n\n    # single-stream\n    warmup: int = 3                  # discarded runs per category\n    runs_per_category: int = 20      # measured runs per category\n    unique_nonce: bool = True        # defeat prefix cache (honest prefill)\n    run_single_stream: bool = True\n\n    # concurrency sweep\n    concurrency_levels: list[int] = field(default_factory=lambda: [1, 2, 4, 8, 16])\n    concurrency_requests: int = 48   # completed requests per level\n    run_concurrency: bool = True\n\n    # prompt-processing (prefill) sweep \u2014 depth in tokens, tiny decode\n    run_prefill: bool = True\n    prefill_depths: list[int] = field(default_factory=lambda: [2000, 8000, 16000, 32000, 64000])\n    prefill_runs: int = 8\n    prefill_warmup: int = 2\n    prefill_max_tokens: int = 16     # keep decode tiny so TTFT is dominated by prefill\n    prefill_ctx_margin: int = 256    # headroom (chat template/system tokens) when ctx-checking\n\n    # context window: override the model's max context; if None it is auto-detected\n    # from GET /v1/models (max_model_len). Depths that don't fit are skipped, not run.\n    max_model_len: int | None = None\n\n    # combined-score category weights (must cover the categories you run)\n    weights: dict[str, float] = field(default_factory=lambda: {\n        \"code\": 0.30, \"reasoning\": 0.20, \"prose\": 0.15, \"json"
+ },
+ {
+  "source": "code/python",
+  "id": "config.py#1",
+  "text": "\": 0.15,\n        \"file_edit\": 0.10, \"summarization\": 0.10,\n    })\n\n    # repeatability / A/B\n    conf: float = 0.95\n    target_mde_pct: float = 1.0      # minimum detectable effect goal\n    ab_max_pairs: int = 200          # ceiling for sequential run-to-confidence\n    ab_min_pairs: int = 12\n\n    # misc\n    timeout_s: float = 600.0\n\n    def effective_temp(self) -> float:\n        return 0.0 if self.greedy else self.temperature\n\n    def as_dict(self) -> dict:\n        return asdict(self)\n\n    @classmethod\n    def load(cls, path: str | Path | None) -> \"Config\":\n        cfg = cls()\n        if path:\n            data = json.loads(Path(path).read_text())\n            for k, v in data.items():\n                if hasattr(cfg, k):\n                    setattr(cfg, k, v)\n        return cfg"
+ },
+ {
+  "source": "code/python",
+  "id": "corpus.py#0",
+  "text": "\"\"\"Load the versioned prompt corpus (JSONL per category).\"\"\"\nfrom __future__ import annotations\n\nimport json\nimport random\nfrom dataclasses import dataclass\nfrom pathlib import Path\n\n_HERE = Path(__file__).resolve().parent\n\ndef corpus_search_paths(version: str = \"v1\") -> list[Path]:\n    \"\"\"Candidate corpus locations, in priority order.\n\n    A built wheel copies ``corpus`` to ``betterbench/corpus`` (see pyproject\n    force-include), so the in-package path wins there. An editable install\n    (``pip install -e .``) or a git checkout uses the source tree as-is, where\n    the corpus sits at the repo root \u2014 hence the parent fallback. Without this,\n    editable installs raise \"no prompts found\".\n    \"\"\"\n    return [\n        _HERE / \"corpus\" / version,          # installed wheel layout\n        _HERE.parent / \"corpus\" / version,   # source tree / editable layout\n    ]\n\ndef _resolve_default_dir(version: str = \"v1\") -> Path:\n    for d in corpus_search_paths(version):\n        if d.is_dir() and any(d.glob(\"*.jsonl\")):\n            return d\n    # nothing found \u2014 return the first candidate so callers can report a path\n    return corpus_search_paths(version)[0]\n\n_DEFAULT_DIR = _resolve_default_dir()\n\n@dataclass\nclass Prompt:\n    id: str\n    category: str\n    input_len_bucket: str      # short | medium | long\n    output_len_bucket: str     # short | medium | long\n    max_tokens: int\n    messages: list[dict]\n\n    @classmethod\n    def from_obj(cls, o: dict) -> \"Prompt\":\n        return cls(\n            id=o[\"id\"],\n            category=o[\"category\"],\n            input_len_bucket=o.get(\"input_len_bucket\", \"short\"),\n            output_len_bucket=o.get(\"output_len_bucket\", \"medium\"),\n            max_tokens=int(o.get(\"max_tokens\", 512)),\n            messages=o[\"messages\"],\n        )\n\ndef load_co"
+ },
+ {
+  "source": "code/python",
+  "id": "corpus.py#1",
+  "text": "rpus(corpus_dir: str | Path | None = None,\n                categories: list[str] | None = None) -> dict[str, list[Prompt]]:\n    d = Path(corpus_dir) if corpus_dir else _DEFAULT_DIR\n    out: dict[str, list[Prompt]] = {}\n    for f in sorted(d.glob(\"*.jsonl\")):\n        cat = f.stem\n        if categories and cat not in categories:\n            continue\n        prompts = []\n        for line in f.read_text().splitlines():\n            line = line.strip()\n            if not line or line.startswith(\"#\"):\n                continue\n            prompts.append(Prompt.from_obj(json.loads(line)))\n        if prompts:\n            out[cat] = prompts\n    return out\n\ndef with_nonce(messages: list[dict], nonce: str) -> list[dict]:\n    \"\"\"Prepend a unique tag to the first user message so repeated runs do NOT\n    hit the server's prefix cache (honest prefill timing). See plan \u00a73.3.\"\"\"\n    msgs = [dict(m) for m in messages]\n    for m in msgs:\n        if m.get(\"role\") == \"user\":\n            m[\"content\"] = f\"[bb:{nonce}] \" + str(m[\"content\"])\n            break\n    else:\n        msgs.insert(0, {\"role\": \"user\", \"content\": f\"[bb:{nonce}]\"})\n    return msgs\n\ndef nonce(rng: random.Random) -> str:\n    return f\"{rng.randrange(16**8):08x}\""
+ },
+ {
+  "source": "json/catalog",
+  "id": "benchmarks#0",
+  "text": "{\n \"schema_version\": \"1.0\",\n \"updated_at\": \"2026-09-01\",\n \"source\": {\n  \"repository\": \"https://github.com/SergiioB/intel-arc-pro-b70-inference-cookbook\",\n  \"branch\": \"master\"\n },\n \"records\": [\n  {\n   \"id\": \"qwen36-35a3-mtp4-p512-g128-c1\",\n   \"kind\": \"benchmark\",\n   \"title\": \"Qwen3.6-35B-A3B MTP4\",\n   \"summary\": \"Short-context C1 decode on the pinned Pi image.\",\n   \"evidence_status\": \"official-lab\",\n   \"hardware\": {\n    \"gpu_model\": \"Intel Arc Pro B70\",\n    \"gpu_count\": 1,\n    \"vram_gib_per_gpu\": 32,\n    \"power_cap_w\": 165\n   },\n   \"engine\": {\n    \"name\": \"vllm\",\n    \"version\": \"0.26.1rc1.dev457+gc810e5ee9.xpu\"\n   },\n   \"model\": {\n    \"id\": \"llmfan46/Qwen3.6-35B-A3B-uncensored-heretic-Native-MTP-Preserved-GPTQ-Int4\",\n    \"quantization\": \"GPTQ-INT4\",\n    \"speculation\": \"MTP4\"\n   },\n   \"workload\": {\n    \"concurrency\": 1,\n    \"prompt_tokens\": 512,\n    \"output_tokens\": 128,\n    \"context_limit_tokens\": 131072,\n    \"cache\": \"enabled-zero-hit\"\n   },\n   \"metrics\": [\n    {\n     \"name\": \"client_post_first_output_tps\",\n     \"value\": 170.91,\n     \"unit\": \"token/s\"\n    }\n   ],\n   \"statistics\": {\n    \"statistic\": \"median\",\n    \"samples\": 5\n   },\n   \"evidence\": {\n    \"commit\": \"a4ba875413728bd787a2a01a2fc0cac46b035701\",\n    \"url\": \"https://github.com/SergiioB/intel-arc-pro-b70-inference-cookbook/blob/a4ba875413728bd787a2a01a2fc0cac46b035701/docs/qwen36-35a3/QWEN36-MOE-VLLM-XPU.md\"\n   }\n  },\n  {\n   \"id\": \"qwen38-27-draft-int4-p512-g128-c1\",\n   \"kind\": \"benchmark\",\n   \"title\": \"Qwen3.8-27B Draft INT4\",\n   \"summary\": \"Current-stack calibrated Pi prompt result; target GPTQ-INT4 with Draft INT4 S+M1.\",\n   \"evidence_status\": \"official-lab\",\n   \"hardware\": {\n    \"gpu_model\": \"Intel Arc Pro B70\",\n    \"gpu_count\": 1,\n    \"vram_gib_per_gpu\": 32,\n    \"power_cap_w\": 230\n   },\n   \"engine\": {\n    \"n"
+ },
+ {
+  "source": "json/catalog",
+  "id": "benchmarks#1",
+  "text": "ame\": \"vllm\",\n    \"version\": \"0.27.2rc1.dev77+gac7509e2b\"\n   },\n   \"model\": {\n    \"id\": \"SergiioB/Qwen3.8-27B-GPTQ-Int4-sym-G128-MTP-BF16\",\n    \"quantization\": \"GPTQ-INT4 + Draft INT4 S+M1\",\n    \"speculation\": \"MTP4\"\n   },\n   \"workload\": {\n    \"concurrency\": 1,\n    \"prompt_tokens\": 512,\n    \"output_tokens\": 128,\n    \"context_limit_tokens\": 131072,\n    \"cache\": \"enabled\"\n   },\n   \"metrics\": [\n    {\n     \"name\": \"client_post_first_output_tps\",\n     \"value\": 106.7,\n     \"unit\": \"token/s\"\n    }\n   ],\n   \"statistics\": {\n    \"statistic\": \"median\",\n    \"samples\": 5\n   },\n   \"evidence\": {\n    \"commit\": \"a4ba875413728bd787a2a01a2fc0cac46b035701\",\n    \"url\": \"https://github.com/SergiioB/intel-arc-pro-b70-inference-cookbook/blob/a4ba875413728bd787a2a01a2fc0cac46b035701/docs/qwen38-27/QWEN38-VLLM-XPU.md\"\n   }\n  },\n  {\n   \"id\": \"qwen36-27-mtp4-p512-g128-c1\",\n   \"kind\": \"benchmark\",\n   \"title\": \"Qwen3.6-27B MTP4\",\n   \"summary\": \"Dense GPTQ-INT4 decode with mandatory FP8 KV cache.\",\n   \"evidence_status\": \"official-lab\",\n   \"hardware\": {\n    \"gpu_model\": \"Intel Arc Pro B70\",\n    \"gpu_count\": 1,\n    \"vram_gib_per_gpu\": 32,\n    \"power_cap_w\": 230\n   },\n   \"engine\": {\n    \"name\": \"vllm\",\n    \"version\": \"0.26.1rc1.dev457+gc810e5ee9.xpu\"\n   },\n   \"model\": {\n    \"id\": \"llmfan46/Qwen3.6-27B-uncensored-heretic-v2-Native-MTP-Preserved-GPTQ-Int4\",\n    \"quantization\": \"GPTQ-INT4\",\n    \"speculation\": \"MTP4\"\n   },\n   \"workload\": {\n    \"concurrency\": 1,\n    \"prompt_tokens\": 512,\n    \"output_tokens\": 128,\n    \"context_limit_tokens\": 131072,\n    \"cache\": \"enabled-zero-hit\"\n   },\n   \"metrics\": [\n    {\n     \"name\": \"client_post_first_output_tps\",\n     \"value\": 69.3,\n     \"unit\": \"token/s\"\n    }\n   ],\n   \"statistics\": {\n    \"statistic\": \"median\",\n    \"samples\": 5\n   },\n   \"evidence\": {\n    \"commit\": \"a4b"
+ },
+ {
+  "source": "json/catalog",
+  "id": "benchmarks#2",
+  "text": "a875413728bd787a2a01a2fc0cac46b035701\",\n    \"url\": \"https://github.com/SergiioB/intel-arc-pro-b70-inference-cookbook/blob/a4ba875413728bd787a2a01a2fc0cac46b035701/docs/qwen36-27/QWEN36-DENSE-VLLM-XPU.md\"\n   }\n  },\n  {\n   \"id\": \"nemotron35-dflash-p2048-g128-c1\",\n   \"kind\": \"benchmark\",\n   \"title\": \"Nemotron-3.5-Lightning DFlash\",\n   \"summary\": \"Representative C1 DFlash decode cell; cache off.\",\n   \"evidence_status\": \"official-lab\",\n   \"hardware\": {\n    \"gpu_model\": \"Intel Arc Pro B70\",\n    \"gpu_count\": 1,\n    \"vram_gib_per_gpu\": 32,\n    \"power_cap_w\": 150\n   },\n   \"engine\": {\n    \"name\": \"vllm\",\n    \"version\": \"0.26.1rc1.dev668+g3ee2df303\"\n   },\n   \"model\": {\n    \"id\": \"SergiioB/Nemotron-3.5-Lightning-30B-A3B-GPTQ-INT4-G64-sym\",\n    \"quantization\": \"GPTQ-INT4 G64\",\n    \"speculation\": \"DFlash n7\"\n   },\n   \"workload\": {\n    \"concurrency\": 1,\n    \"prompt_tokens\": 2048,\n    \"output_tokens\": 128,\n    \"context_limit_tokens\": 16384,\n    \"cache\": \"disabled\"\n   },\n   \"metrics\": [\n    {\n     \"name\": \"client_post_first_output_tps\",\n     \"value\": 186.61,\n     \"unit\": \"token/s\"\n    }\n   ],\n   \"statistics\": {\n    \"statistic\": \"median\",\n    \"samples\": 5\n   },\n   \"evidence\": {\n    \"commit\": \"a4ba875413728bd787a2a01a2fc0cac46b035701\",\n    \"url\": \"https://github.com/SergiioB/intel-arc-pro-b70-inference-cookbook/blob/a4ba875413728bd787a2a01a2fc0cac46b035701/docs/nemotron35-30a3/NEMOTRON-DFLASH-B70.md\"\n   }\n  },\n  {\n   \"id\": \"muse-glimmer-dflash-p512-g128-c1\",\n   \"kind\": \"benchmark\",\n   \"title\": \"Muse-Glimmer-30B DFlash\",\n   \"summary\": \"llama.cpp engine-reported generation rate at 128K context.\",\n   \"evidence_status\": \"official-lab\",\n   \"hardware\": {\n    \"gpu_model\": \"Intel Arc Pro B70\",\n    \"gpu_count\": 1,\n    \"vram_gib_per_gpu\": 32,\n    \"power_cap_w\": 230\n   },\n   \"engine\": {\n    \"name\":"
+ }
+]

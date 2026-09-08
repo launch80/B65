@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.venv/
+capture/
+*.pt
+*.safetensors
+*.parquet
