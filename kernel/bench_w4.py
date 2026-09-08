@@ -17,13 +17,15 @@ dev, G = "xpu", 128
 ap = argparse.ArgumentParser()
 ap.add_argument("--reps", type=int, default=50)
 ap.add_argument("--footprint-mb", type=float, default=512.0)
+ap.add_argument("--ncol", type=int, default=2)
 a = ap.parse_args()
+NCOL = a.ncol
 
 props = torch.xpu.get_device_properties(0)
 if props.total_memory < 20e9:
     raise SystemExit(f"REFUSING: {props.total_memory/1e9:.1f} GB device, not the B65. "
                      "Pass --device /dev/dri/renderD130.")
-print(f"device: {torch.xpu.get_device_name(0)}   {props.total_memory/1e9:.1f} GB\n")
+print(f"device: {torch.xpu.get_device_name(0)}   {props.total_memory/1e9:.1f} GB   NCOL={NCOL}\n")
 
 # Our nibble permutation: weight 2t -> bit 4t, weight 2t+1 -> bit 16+4t.
 # So a (w >> 4t) & 0x000F000F lands the pair (w_2t, w_2t+1) in the two fp16 halves.
@@ -62,7 +64,7 @@ for K, N, cnt in SHAPES:
     x = torch.randn(1, K, dtype=torch.float16, device=dev)
 
     ref = torch.ops._xpu_C.int4_gemm_w4a16(x, vend[0][0], None, vend[0][1], qz, G, None)
-    got = torch.ops.p608.gemv_w4(x, ours[0][0], ours[0][1])
+    got = torch.ops.p608.gemv_w4(x, ours[0][0], ours[0][1], NCOL)
     torch.xpu.synchronize()
     err = ((got.float() - ref.float()).norm() / ref.float().norm()).item()
 
@@ -81,7 +83,7 @@ for K, N, cnt in SHAPES:
 
     tv = bench(lambda i: torch.ops._xpu_C.int4_gemm_w4a16(
         x, vend[i % nbuf][0], None, vend[i % nbuf][1], qz, G, None))
-    to = bench(lambda i: torch.ops.p608.gemv_w4(x, ours[i % nbuf][0], ours[i % nbuf][1]))
+    to = bench(lambda i: torch.ops.p608.gemv_w4(x, ours[i % nbuf][0], ours[i % nbuf][1], NCOL))
     gv, go = nbytes / tv / 1e9, nbytes / to / 1e9
     tot.append((K, N, cnt, nbytes, gv, go, err))
     flag = "" if err < 1e-3 else "   <-- ERR"

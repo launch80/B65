@@ -74,7 +74,7 @@ for K, N, cnt in SHAPES:
     qz = torch.tensor([8], dtype=torch.int8, device=dev)
     x = torch.randn(1, K, dtype=torch.float16, device=dev) * 0.05
 
-    got = torch.ops.p608w3.gemv_w3(x, w3[0][0], w3[0][1], False, 2)
+    got = torch.ops.p608w3.gemv_w3(x, w3[0][0], w3[0][1], False, 2, 32, 1)
     ref = (x.float() @ ref_deq.float())
     torch.xpu.synchronize()
     err = ((got.float()-ref).norm()/ref.norm()).item()
@@ -93,7 +93,7 @@ for K, N, cnt in SHAPES:
 
     tv = bench(lambda i: torch.ops._xpu_C.int4_gemm_w4a16(
         x, vend[i%nbuf][0], None, vend[i%nbuf][1], qz, G, None))
-    t3 = bench(lambda i: torch.ops.p608w3.gemv_w3(x, w3[i%nbuf][0], w3[i%nbuf][1], False, 2))
+    t3 = bench(lambda i: torch.ops.p608w3.gemv_w3(x, w3[i%nbuf][0], w3[i%nbuf][1], False, 2, 32, 1))
     # ablation: same loads, straggler math removed. Numerically wrong on 2 of every
     # 32 weights - purely to bound how much of the gap that path still owns.
     tns = bench(lambda i: torch.ops.p608w3.gemv_w3(x, w3[i%nbuf][0], w3[i%nbuf][1], True, 2))
