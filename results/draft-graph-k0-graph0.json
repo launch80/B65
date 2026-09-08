@@ -1,0 +1,15 @@
+{
+ "label": "k0-graph0",
+ "m1": 1,
+ "r6": 1,
+ "k": 0,
+ "drafts": 0.0,
+ "drafted": 0.0,
+ "accepted": 0.0,
+ "acceptance": 0,
+ "tokens_per_step": 1,
+ "draft_gb": 0.306,
+ "gb_step": 13.689,
+ "gb_per_token": 13.689,
+ "observed_tok_s": 30.99484945832236
+}
