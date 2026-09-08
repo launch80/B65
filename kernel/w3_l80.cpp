@@ -38,19 +38,21 @@ using v4_t = sycl::vec<int32_t, 4>;
 template <int BPU> using vb_t = sycl::vec<int32_t, BPU>;
 using h8_t = sycl::vec<half_t, 8>;
 
-template <int SG, int SGS, bool STRAG, int BPU, int NCOL> class W3Kernel;
+template <int SG, int SGS, bool STRAG, int BPS, int NCOL> class W3Kernel;
 
-template <int SG, int SGS, bool STRAG, int BPU, int NCOL>
+// BPS: 32-weight blocks per scale group. 4 = group 128, 2 = group 64, 1 = group 32.
+// Smaller groups cost bytes (3.125 -> 3.25 -> 3.5 bits/weight) and buy accuracy.
+template <int SG, int SGS, bool STRAG, int BPS, int NCOL>
 static void launch_w3(sycl::queue &q, const half_t *x, const int32_t *qw,
                       const half_t *sc, half_t *out, int K, int N) {
     const int NBLK = K / 32;       // 32-weight blocks per column = words per plane
-    const int NU   = NBLK / BPU;   // lane-iterations per column
+    const int NU   = NBLK;         // one 32-weight block per lane-iteration
     const size_t W = (size_t)3 * NBLK;
     const size_t cols = (size_t)SGS * NCOL;
     const size_t wg = SG * SGS, nwg = (N + cols - 1) / cols;
 
     q.submit([&](sycl::handler &h) {
-        h.parallel_for<W3Kernel<SG, SGS, STRAG, BPU, NCOL>>(
+        h.parallel_for<W3Kernel<SG, SGS, STRAG, BPS, NCOL>>(
             sycl::nd_range<1>(nwg * wg, wg),
             [=](sycl::nd_item<1> it) [[sycl::reqd_sub_group_size(SG)]] {
                 auto sg = it.get_sub_group();
@@ -64,7 +66,7 @@ static void launch_w3(sycl::queue &q, const half_t *x, const int32_t *qw,
                 // a time (16 GRF), which is why this fits where the BPU=4 attempt
                 // spilled and collapsed to 39 GB/s.
                 const half2_t zp{(half_t)1028.0f, (half_t)1028.0f};
-                const int NSG = NBLK / 4;
+                const int NSG = NBLK / BPS;
                 float acc[NCOL];
 #pragma unroll
                 for (int c = 0; c < NCOL; ++c) acc[c] = 0.f;
@@ -106,7 +108,7 @@ static void launch_w3(sycl::queue &q, const half_t *x, const int32_t *qw,
                                   * half2_t{xv[3][6], xv[3][7]};
                         }
                         acc[c] += ((float)s2[0] + (float)s2[1])
-                                  * (float)sc[n * (size_t)NSG + u / 4];
+                                  * (float)sc[n * (size_t)NSG + u / BPS];
                     }
                 }
 #pragma unroll
@@ -121,7 +123,8 @@ static void launch_w3(sycl::queue &q, const half_t *x, const int32_t *qw,
 // nostrag=true skips weights 30/31 entirely: numerically WRONG, used only to
 // bound how much of the remaining gap the straggler path still owns.
 at::Tensor gemv_w3(const at::Tensor &x, const at::Tensor &qw, const at::Tensor &sc,
-                   bool nostrag, int64_t ncol, int64_t sg, int64_t sgs) {
+                   bool nostrag, int64_t ncol, int64_t sg, int64_t sgs,
+                   int64_t bps) {
     // NCOL=2 output columns per sub-group is the default. It amortises each block's
     // four h8 activation loads over two columns, worth 1.02x -> 1.17x. NCOL=8 spills
     // and collapses to 0.77x, so this is a real optimum and not a monotonic knob.
@@ -138,22 +141,23 @@ at::Tensor gemv_w3(const at::Tensor &x, const at::Tensor &qw, const at::Tensor &
     const auto *scp = reinterpret_cast<const half_t *>(sc.data_ptr<at::Half>());
     auto *op        = reinterpret_cast<half_t *>(out.data_ptr<at::Half>());
     auto *qp        = qw.data_ptr<int32_t>();
-    // SG x SGS is the work-group shape: SG lanes per sub-group (one output column
-    // each in the NCOL=1 case), SGS sub-groups per work-group. Untested until now.
-#define D(SG_, SGS_, NCOL_) \
-    do { if (nostrag) launch_w3<SG_, SGS_, false, 1, NCOL_>(q, xp, qp, scp, op, K, N); \
-         else         launch_w3<SG_, SGS_, true,  1, NCOL_>(q, xp, qp, scp, op, K, N); } while (0)
-#define DN(SG_, SGS_) \
-    do { switch (ncol) { case 1: D(SG_, SGS_, 1); break; case 4: D(SG_, SGS_, 4); break; \
-                         default: D(SG_, SGS_, 2); break; } } while (0)
-    switch (sgs * 100 + sg) {
-        case 116: DN(16, 1); break;  case 216: DN(16, 2); break;
-        case 416: DN(16, 4); break;  case 816: DN(16, 8); break;
-        case 132: DN(32, 1); break;  case 232: DN(32, 2); break;
-        case 832: DN(32, 8); break;  case 1632: DN(32, 16); break;
-        default:  DN(32, 1); break;
+    // SG=32 fixed: 16 lost on every shape in the sweep. SGS=1 / NCOL=2 are the
+    // measured optimum; both stay reachable for re-tuning.
+#define D(SGS_, BPS_, NCOL_) \
+    do { if (nostrag) launch_w3<32, SGS_, false, BPS_, NCOL_>(q, xp, qp, scp, op, K, N); \
+         else         launch_w3<32, SGS_, true,  BPS_, NCOL_>(q, xp, qp, scp, op, K, N); } while (0)
+#define DB(SGS_, BPS_) \
+    do { switch (ncol) { case 1: D(SGS_, BPS_, 1); break; case 4: D(SGS_, BPS_, 4); break; \
+                         default: D(SGS_, BPS_, 2); break; } } while (0)
+#define DS(SGS_) \
+    do { switch (bps) { case 1: DB(SGS_, 1); break; case 2: DB(SGS_, 2); break; \
+                        default: DB(SGS_, 4); break; } } while (0)
+    switch (sgs) {
+        case 2: DS(2); break;  case 4: DS(4); break;  case 8: DS(8); break;
+        default: DS(1); break;
     }
-#undef DN
+#undef DS
+#undef DB
 #undef D
     return out;
 }
@@ -168,11 +172,12 @@ at::Tensor gemv_w3(const at::Tensor &x, const at::Tensor &qw, const at::Tensor &
 // Uses the same extraction as the GEMV, deliberately, so the two paths cannot drift.
 template <int SG> class W3Dequant;
 
-at::Tensor dequant_w3(const at::Tensor &qw, const at::Tensor &sc, int64_t K) {
+at::Tensor dequant_w3(const at::Tensor &qw, const at::Tensor &sc, int64_t K,
+                      int64_t bps) {
     TORCH_CHECK(qw.is_xpu() && sc.is_xpu(), "tensors must be XPU");
     TORCH_CHECK(qw.is_contiguous() && sc.is_contiguous(), "must be contiguous");
     const int N = (int)qw.size(0);
-    const int NBLK = (int)K / 32, NSG = NBLK / 4;
+    const int NBLK = (int)K / 32, NSG = NBLK / bps;
     const size_t W = (size_t)3 * NBLK;
     auto out = at::empty({(int64_t)N, K},
                          at::TensorOptions().dtype(at::kHalf).device(qw.device()));
@@ -190,7 +195,7 @@ at::Tensor dequant_w3(const at::Tensor &qw, const at::Tensor &sc, int64_t K) {
                 const uint32_t w0 = (uint32_t)col[b];
                 const uint32_t w1 = (uint32_t)col[NBLK + b];
                 const uint32_t w2 = (uint32_t)col[2 * NBLK + b];
-                const float s = (float)sp[n * (size_t)NSG + b / 4];
+                const float s = (float)sp[n * (size_t)NSG + b / bps];
                 half_t *o = op + n * (size_t)K + b * 32;
 #pragma unroll
                 for (int m = 0; m < 3; ++m) {
@@ -215,8 +220,8 @@ at::Tensor dequant_w3(const at::Tensor &qw, const at::Tensor &sc, int64_t K) {
 }
 
 TORCH_LIBRARY(p608w3, m) {
-    m.def("gemv_w3(Tensor x, Tensor qw, Tensor sc, bool nostrag=False, int ncol=2, int sg=32, int sgs=1) -> Tensor");
-    m.def("dequant_w3(Tensor qw, Tensor sc, int K) -> Tensor");
+    m.def("gemv_w3(Tensor x, Tensor qw, Tensor sc, bool nostrag=False, int ncol=2, int sg=32, int sgs=1, int bps=4) -> Tensor");
+    m.def("dequant_w3(Tensor qw, Tensor sc, int K, int bps=4) -> Tensor");
 }
 TORCH_LIBRARY_IMPL(p608w3, XPU, m) {
     m.impl("gemv_w3", gemv_w3);

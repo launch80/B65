@@ -73,15 +73,48 @@ closer to bandwidth-bound, so the lever that mattered at 3 bits barely moves it.
 independently reproduces what `docs/10` concluded: the incumbent GEMV is not the
 bottleneck.
 
+## Group size was tested and is not the lever
+
+The obvious rescue was that the failure is at group 128, and that a finer group would
+recover accuracy for a modest byte cost. Tested on layers 9-10, same calibration, same
+held-out scoring; group 128 reproduced the earlier numbers exactly, so the three rows
+are directly comparable:
+
+| group | bits/wt | bytes vs int4 | kernel speedup | median out err | p95 |
+|---|---|---|---|---|---|
+| 128 | 3.125 | 0.758x | **1.17x** | 21.18% | 23.09% |
+| 64 | 3.250 | 0.788x | **1.16x** | 19.93% | 21.13% |
+| 32 | 3.500 | 0.848x | **1.11x** | 17.93% | 19.10% |
+| *gate* | | | | *<=6%* | |
+
+**Halving the group twice buys 15% relative error and costs 12% more bytes.** At
+roughly 6% relative improvement per halving, closing the 3.5x gap to the 6% gate would
+take on the order of twenty halvings. The error is dominated by having only 8 levels,
+not by scale granularity: with the grid at s = amax/3, RMS quantization error is about
+s/sqrt(12) ~ 0.096*amax regardless of how finely amax is estimated. Finer groups only
+reduce how much a group's outlier inflates its own scale, which is a second-order
+effect.
+
+**3-bit is not viable for this model at any practical group size.**
+
+Worth recording separately: the kernel side of this trade is nearly free. Group 64
+costs 1% of the speedup (1.17x -> 1.16x) because the kernel is ALU-bound, the dequant
+op count is identical, and the scale *load* count per block does not change - only
+1.4 MB more data out of 36. The kernel supports groups 128/64/32 via its BPS
+parameter and is correct at all three (rel err ~6.4e-04). If another model's weights
+do survive 3 bits, the fast path is already there.
+
 ## Where a deployable win would have to come from
 
 Not from the 4-bit kernel — it is at the wall. Two candidates remain:
 
-1. **3-bit at a smaller group.** The failure above is at group 128. Group 64 is
-   3.25 bits/weight (21% fewer bytes than int4's 4.125) and group 32 is 3.5
-   (15% fewer); both should cut quantization error substantially, since group size is
-   the standard lever for exactly this failure mode. The kernel ties one scale to 4
-   blocks; supporting 2 blocks or 1 is a small change. **Untested.**
-2. **The MTP draft passes**, which `docs/11-current-state.md` identifies as ~20% of
-   the byte budget and quality-free by construction, since the target verifies every
-   token. Not kernel work.
+Not from a finer 3-bit group either - that was the obvious rescue and it is measured
+dead above. What remains:
+
+1. **The MTP draft passes**, which `docs/11-current-state.md` identifies as ~20% of the
+   byte budget and quality-free by construction, since the target verifies every token.
+   Not kernel work, and the largest remaining lever.
+2. **A representation with more than 8 levels per weight but fewer than 16 bytes'
+   worth** - the failure here is level count, so anything that keeps 4-bit's grid while
+   spending fewer bytes (a shared/low-rank correction, a sparse outlier channel on top of
+   3-bit) attacks the actual constraint. Speculative; nothing measured.

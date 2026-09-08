@@ -48,6 +48,10 @@ ap.add_argument("--util", type=float, default=0.70)
 a = ap.parse_args()
 os.makedirs(a.out, exist_ok=True)
 DEV = "xpu"
+# The SOURCE checkpoint is GPTQ int4 at group 128 (quantize_config.json). That is
+# fixed and independent of --group, which sets the group of the 3-bit weights we
+# produce. Conflating the two silently reshapes the dequantised source.
+SRC_GROUP = 128
 
 # ---------------------------------------------------------------- calibration text
 CALIB_URL = ("https://raw.githubusercontent.com/pytorch/examples/main/"
@@ -87,14 +91,15 @@ print(f"{len(QMODS)} quantized modules across {len(LAYERS)} layers\n")
 
 
 def dequant(mod):
-    """vLLM GPTQ int4 -> dense fp32 [K, N]. Layout is verified, not assumed."""
+    """vLLM GPTQ int4 (always group 128) -> dense fp32 [K, N].
+    Layout is verified, not assumed."""
     qw, sc = mod.qweight, mod.scales
     N, K8 = qw.shape
     K = K8 * 8
     sh = (torch.arange(8, device=qw.device, dtype=torch.int32) * 4).view(1, 8, 1)
     nib = ((qw.t().unsqueeze(1) >> sh) & 0xF).reshape(K, N)     # [K, N]
     s = sc.to(torch.float32)                                     # [K/G, N]
-    return (nib.to(torch.float32) - 8.0) * s.repeat_interleave(a.group, dim=0)
+    return (nib.to(torch.float32) - 8.0) * s.repeat_interleave(SRC_GROUP, dim=0)
 
 
 @torch.no_grad()

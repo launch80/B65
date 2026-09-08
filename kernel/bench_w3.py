@@ -21,11 +21,15 @@ H = os.path.dirname(os.path.abspath(__file__))
 torch.ops.load_library(os.path.join(H, "libw4_l80.so"))
 torch.ops.load_library(os.path.join(H, "libw3_l80.so"))
 
-dev, G = "xpu", 128
+dev, G = "xpu", 128        # the VENDOR int4 group, always 128
 ap = argparse.ArgumentParser()
 ap.add_argument("--reps", type=int, default=50)
 ap.add_argument("--footprint-mb", type=float, default=512.0)
+ap.add_argument("--group", type=int, default=128,
+                help="3-bit scale group: 128=3.125 bits/wt, 64=3.25, 32=3.5")
 a = ap.parse_args()
+G3 = a.group               # our 3-bit group
+BPS = G3 // 32             # 32-weight blocks per scale group
 
 props = torch.xpu.get_device_properties(0)
 if props.total_memory < 20e9:
@@ -53,7 +57,7 @@ print("  " + "-" * 92)
 rows = []
 for K, N, cnt in SHAPES:
     b4 = (K // 8) * N * 4 + (K // G) * N * 2
-    b3 = (K // 32) * 3 * N * 4 + (K // G) * N * 2
+    b3 = (K // 32) * 3 * N * 4 + (K // G3) * N * 2
     nbuf = max(2, int(a.footprint_mb * 1e6 / b4 + 0.5))
     rng = np.random.default_rng(608 + K + N)
 
@@ -64,17 +68,17 @@ for K, N, cnt in SHAPES:
         ws = (torch.randn(N, K//G, dtype=torch.float16, device=dev).abs()+0.01).t().contiguous()
         vend.append((qw, ws))
         codes = rng.integers(0, 8, size=(K, N)).astype(np.uint8)
-        s3 = (torch.randn(N, K//G, dtype=torch.float16, device=dev).abs()*0.02+0.005).contiguous()
+        s3 = (torch.randn(N, K//G3, dtype=torch.float16, device=dev).abs()*0.02+0.005).contiguous()
         w3.append((pack_planes(codes), s3))
         if j == 0:
             cf = torch.from_numpy(codes.astype(np.int16)).to(dev).float() - 4.0
-            sf = s3.t().float().repeat_interleave(G, dim=0)      # [K, N]
+            sf = s3.t().float().repeat_interleave(G3, dim=0)     # [K, N]
             ref_deq = (cf * sf).half()
 
     qz = torch.tensor([8], dtype=torch.int8, device=dev)
     x = torch.randn(1, K, dtype=torch.float16, device=dev) * 0.05
 
-    got = torch.ops.p608w3.gemv_w3(x, w3[0][0], w3[0][1], False, 2, 32, 1)
+    got = torch.ops.p608w3.gemv_w3(x, w3[0][0], w3[0][1], False, 2, 32, 1, BPS)
     ref = (x.float() @ ref_deq.float())
     torch.xpu.synchronize()
     err = ((got.float()-ref).norm()/ref.norm()).item()
@@ -93,7 +97,7 @@ for K, N, cnt in SHAPES:
 
     tv = bench(lambda i: torch.ops._xpu_C.int4_gemm_w4a16(
         x, vend[i%nbuf][0], None, vend[i%nbuf][1], qz, G, None))
-    t3 = bench(lambda i: torch.ops.p608w3.gemv_w3(x, w3[i%nbuf][0], w3[i%nbuf][1], False, 2, 32, 1))
+    t3 = bench(lambda i: torch.ops.p608w3.gemv_w3(x, w3[i%nbuf][0], w3[i%nbuf][1], False, 2, 32, 1, BPS))
     # ablation: same loads, straggler math removed. Numerically wrong on 2 of every
     # 32 weights - purely to bound how much of the gap that path still owns.
     tns = bench(lambda i: torch.ops.p608w3.gemv_w3(x, w3[i%nbuf][0], w3[i%nbuf][1], True, 2))
@@ -114,9 +118,12 @@ print(f"  over the 400-linear mix: vendor {tv_*1e3:.2f} ms ({b4_/tv_/1e9:.0f} GB
       f"W3 {t3_*1e3:.2f} ms ({b3_/t3_/1e9:.0f} GB/s)   SPEEDUP {tv_/t3_:.2f}x")
 
 r = [t for t in rows if (t[0],t[1])==(5120,17408)][0]
-V, W, B = r[5], r[6], 0.757*r[5]
+ratio = r[4] / r[3]        # 3-bit bytes / int4 bytes, at THIS group size
+V, W, B = r[5], r[6], ratio * r[5]
 print(f"\n{'='*80}")
-print(f"  GATE (5120x17408)   vendor V = {V:.1f} GB/s   break-even B = {B:.1f} GB/s")
+print(f"  GATE (5120x17408)  group {G3} = {3+16/G3:.3f} bits/wt, "
+      f"{ratio:.3f}x the int4 bytes")
+print(f"    vendor V = {V:.1f} GB/s   break-even B = {B:.1f} GB/s")
 print(f"    W3 rate      {W:.1f} GB/s   {'PASS' if W>=B else 'FAIL'}  (need >= {B:.0f})")
 print(f"    W3 time      {r[8]*1e6:.1f} us vs vendor {r[7]*1e6:.1f} us -> {r[7]/r[8]:.2f}x")
 print(f"    correctness  rel err {r[9]:.2e}  {'PASS' if r[9]<2e-3 else 'FAIL'}")
