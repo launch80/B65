@@ -77,6 +77,23 @@ prefix**. A slice, not a gather. **7.6× cheaper draft head, +6%.**
 Verified: 7/8 completions byte-identical to a no-speculation reference — the same 7/8 as
 before the change.
 
+## Reading the numbers honestly
+
+**77.2 is decode-only, short prompts, a fixed corpus.** Through a coding agent at 21k
+context the same server reports **47.6 end-to-end**. Nothing is wrong; they measure
+different things:
+
+| | |
+|---|---|
+| benchmark starts the clock at the first token | a request also pays prompt processing — 2.7 s here, a third of a 400-token reply's wall clock |
+| benchmarks use short prompts | 100 t/s at 500 tokens of context, 76.9 at 12k, **69.8 at 21k**, 65.2 at 28k |
+| acceptance is workload-dependent | 100% on repetitive text, 35% on dense prose — a 1.8× throughput swing |
+
+**Measuring trap:** under speculative decoding one streaming chunk carries a *burst* of
+tokens. Counting chunks undercounts by exactly the acceptance factor — it briefly looked
+like a 3× regression here. Ask for `stream_options: {"include_usage": true}` and trust the
+usage block. `bench/context_sweep.py` does it correctly.
+
 ## Verify it yourself
 
 ```sh
