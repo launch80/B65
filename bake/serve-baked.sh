@@ -9,7 +9,9 @@
 set -euo pipefail
 BAKED="${BAKED:?path to the assembled baked checkpoint}"
 IMAGE="${IMAGE:-vllm/vllm-openai-xpu@sha256:f01e24f6c7ff01f1e0662234255a1372297d1dbd89d003cf13c8fad3eab1ba4f}"
-SERVED="${SERVED:-launch80/Qwen3.8-27B-GPTQ-Int4-baked}"
+# Space-separated: every name routes to the same weights. The HF canonical id and its
+# lowercase form (the BetterBench / L80 label) are the same checkpoint, not an alias.
+SERVED="${SERVED:-Launch80/Qwen3.8-27B-GPTQ-Int4-baked launch80/Qwen3.8-27B-GPTQ-Int4-baked}"
 PORT="${PORT:-8002}"; NAME="${NAME:-vllm-baked}"; GPU_BDF="${GPU_BDF:-0000:86:00.0}"
 MAX_LEN="${MAX_LEN:-32768}"; UTIL="${UTIL:-0.92}"; MAX_SEQS="${MAX_SEQS:-32}"
 SPEC="${SPEC:-6}"; DRAFT_VOCAB="${DRAFT_VOCAB:-32768}"
@@ -25,7 +27,8 @@ rm -rf "$BYPATH_DIR"; mkdir -p "$BYPATH_DIR"; ln -s "../$(basename "$RENDER")" "
 PATCH_CMDS='python /patches/patch_mtp_nightly.py; python /patches/patch_mtp_boundary.py'
 [[ "$SPEC" != "0" ]] && PATCH_CMDS="$PATCH_CMDS; python /patches/patch_gdn_mixed_split_v5.py"
 [[ "$DRAFT_VOCAB" != "0" ]] && PATCH_CMDS="$PATCH_CMDS; python /r3/patch_r3_lmhead_int4.py"
-ARGS=(vllm serve /model --host 0.0.0.0 --port 8000 --served-model-name "$SERVED"
+read -r -a SERVED_ARR <<< "$SERVED"
+ARGS=(vllm serve /model --host 0.0.0.0 --port 8000 --served-model-name "${SERVED_ARR[@]}"
   --quantization gptq --dtype float16 --max-model-len "$MAX_LEN"
   --gpu-memory-utilization "$UTIL" --kv-cache-dtype fp8 --max-num-seqs "$MAX_SEQS"
   --enable-auto-tool-choice --tool-call-parser qwen3_xml --reasoning-parser qwen3)
