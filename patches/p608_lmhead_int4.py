@@ -153,18 +153,58 @@ def r3_draft_logits(module, hidden_states):
     if n <= 0:
         return None
     head = getattr(module, "lm_head", None)
-    weight = getattr(head, "weight", None)
-    if weight is None or n >= weight.shape[0]:
-        return None
     pc = getattr(getattr(module, "vllm_config", None), "parallel_config", None)
     if (getattr(pc, "tensor_parallel_size", 1) or 1) > 1:
         return None
-    packed = _build_prefix(weight, n)
+    weight = getattr(head, "weight", None)
+    qw_loaded = getattr(head, "qweight", None)
+    if os.environ.get("P608_R6_DEBUG") == "1" and not getattr(module, "_r6_dbg", False):
+        module._r6_dbg = True
+        print(f"[P608-R6-DEBUG] head={type(head).__name__} weight={None if weight is None else tuple(weight.shape)} "
+              f"qweight={None if qw_loaded is None else tuple(qw_loaded.shape)} n={n} "
+              f"attrs={[a for a in ('weight','qweight','scales','qzeros','g_idx') if hasattr(head,a)]}", flush=True)
+    if weight is not None:
+        full_v = weight.shape[0]
+        if n >= full_v:
+            return None
+        packed = _build_prefix(weight, n)
+    elif qw_loaded is not None:
+        # P608_R6_QUANTIZED_HEAD: the head is already GPTQ on disk (the baked
+        # checkpoint). vLLM's INC wna16 method leaves it as qweight [K/8, V] with
+        # strides (1, K/8), scales [K/G, V], qzeros = tensor([8]) - the layout
+        # _build() would have produced - so slice it instead of quantizing fp16.
+        sc_loaded = head.scales                         # [K/G, V]
+        full_v = sc_loaded.shape[1]
+        K8 = qw_loaded.numel() // full_v                 # K/8
+        if n >= full_v:
+            return None
+        key = (qw_loaded.untyped_storage().data_ptr(), n)
+        if key not in _PREFIX:
+            # The head's qweight is a [V, K/8] row-major tensor as loaded by the INC
+            # method (measured: shape (248320, 640)), so the first n vocabulary rows
+            # are a contiguous prefix; transposing that slice gives the [K/8, n] view
+            # with strides (1, K/8) that int4_gemm_w4a16 expects. Handle the
+            # already-transposed [K/8, V] view too, in case a future vLLM changes it.
+            if tuple(qw_loaded.shape) == (full_v, K8):
+                pq = qw_loaded[:n].contiguous().t()
+            else:
+                pq = qw_loaded[:, :n].contiguous().t().contiguous().t()
+            ps = sc_loaded[:, :n].contiguous()
+            qz = torch.tensor([8], dtype=torch.int8, device=qw_loaded.device)
+            gs = (K8 * 8) // sc_loaded.shape[0]
+            _PREFIX[key] = (pq, ps, qz, gs)
+            b = pq.numel() * 4 + ps.numel() * 2
+            fb = qw_loaded.numel() * 4 + sc_loaded.numel() * 2
+            print(f"[P608-R6] draft head (INT4 on disk, qweight {tuple(qw_loaded.shape)} stride {tuple(qw_loaded.stride())}) "
+                  f"truncated to first {n} of {full_v} rows: {fb/1e9:.3f} -> {b/1e9:.3f} GB per draft pass "
+                  f"({fb/b:.1f}x); prefix view {tuple(pq.shape)} stride {tuple(pq.stride())}", flush=True)
+        packed = _PREFIX[key]
+    else:
+        return None
     if packed is None:
         return None
     logits = int4_lmhead_logits(hidden_states, *packed)
     # Pad back to full width with -inf so downstream shape checks and argmax work.
-    full_v = weight.shape[0]
     lp = getattr(module, "logits_processor", None)
     org = getattr(lp, "org_vocab_size", None) or full_v
     out = torch.full((*logits.shape[:-1], org), float("-inf"),

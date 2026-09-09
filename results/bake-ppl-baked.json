@@ -1,0 +1,375 @@
+{
+ "perplexity": 6.1326091734319705,
+ "tokens": 13027,
+ "mean_logprob": -1.813620299426937,
+ "per_category": {
+  "betterbench/chat": {
+   "ppl": 6.9379129617915565,
+   "tokens": 209
+  },
+  "betterbench/code": {
+   "ppl": 7.559680993601341,
+   "tokens": 197
+  },
+  "betterbench/file_edit": {
+   "ppl": 4.419635838586278,
+   "tokens": 275
+  },
+  "betterbench/json": {
+   "ppl": 9.888832215520841,
+   "tokens": 225
+  },
+  "betterbench/math": {
+   "ppl": 5.412746704747938,
+   "tokens": 128
+  },
+  "betterbench/prose": {
+   "ppl": 17.83031800411452,
+   "tokens": 150
+  },
+  "betterbench/reasoning": {
+   "ppl": 6.642283984089424,
+   "tokens": 202
+  },
+  "betterbench/summarization": {
+   "ppl": 19.04636425107462,
+   "tokens": 301
+  },
+  "prose/cookbook": {
+   "ppl": 9.45896682440069,
+   "tokens": 5499
+  },
+  "code/python": {
+   "ppl": 3.8358027500496195,
+   "tokens": 3401
+  },
+  "json/catalog": {
+   "ppl": 3.4937817302646907,
+   "tokens": 2440
+  }
+ },
+ "passages": [
+  {
+   "category": "betterbench/chat",
+   "id": "chat-followup",
+   "tokens": 79,
+   "mean_logprob": -2.1043549234959698,
+   "ppl": 8.201810507496067
+  },
+  {
+   "category": "betterbench/chat",
+   "id": "chat-clarify",
+   "tokens": 62,
+   "mean_logprob": -2.036622878113356,
+   "ppl": 7.664680880420313
+  },
+  {
+   "category": "betterbench/chat",
+   "id": "chat-medium",
+   "tokens": 68,
+   "mean_logprob": -1.6517434161133304,
+   "ppl": 5.216065677620001
+  },
+  {
+   "category": "betterbench/code",
+   "id": "code-gen-medium",
+   "tokens": 45,
+   "mean_logprob": -1.4109349200731636,
+   "ppl": 4.099786585642441
+  },
+  {
+   "category": "betterbench/code",
+   "id": "code-debug-medium",
+   "tokens": 47,
+   "mean_logprob": -1.9290032837084157,
+   "ppl": 6.8826467755149
+  },
+  {
+   "category": "betterbench/code",
+   "id": "code-sql-short",
+   "tokens": 48,
+   "mean_logprob": -1.8247773335207664,
+   "ppl": 6.2014140183335495
+  },
+  {
+   "category": "betterbench/code",
+   "id": "code-rust-long",
+   "tokens": 57,
+   "mean_logprob": -2.750048663383591,
+   "ppl": 15.643393126106082
+  },
+  {
+   "category": "betterbench/file_edit",
+   "id": "edit-refactor-medium",
+   "tokens": 83,
+   "mean_logprob": -1.4483795993430513,
+   "ppl": 4.256212155412225
+  },
+  {
+   "category": "betterbench/file_edit",
+   "id": "edit-searchreplace-short",
+   "tokens": 51,
+   "mean_logprob": -2.4829140947757895,
+   "ppl": 11.976113145692224
+  },
+  {
+   "category": "betterbench/file_edit",
+   "id": "edit-bigfile-long",
+   "tokens": 141,
+   "mean_logprob": -1.1476711546855773,
+   "ppl": 3.1508465245475743
+  },
+  {
+   "category": "betterbench/json",
+   "id": "json-extract-short",
+   "tokens": 52,
+   "mean_logprob": -2.446683939765745,
+   "ppl": 11.54998270732918
+  },
+  {
+   "category": "betterbench/json",
+   "id": "json-schema-medium",
+   "tokens": 51,
+   "mean_logprob": -1.845195643881144,
+   "ppl": 6.3293379655220745
+  },
+  {
+   "category": "betterbench/json",
+   "id": "json-transform-medium",
+   "tokens": 54,
+   "mean_logprob": -2.400984832087825,
+   "ppl": 11.03403770586395
+  },
+  {
+   "category": "betterbench/json",
+   "id": "json-toolcall-short",
+   "tokens": 68,
+   "mean_logprob": -2.420303531890728,
+   "ppl": 11.249273309924527
+  },
+  {
+   "category": "betterbench/math",
+   "id": "math-word-medium",
+   "tokens": 49,
+   "mean_logprob": -1.52734359256372,
+   "ppl": 4.605925342712089
+  },
+  {
+   "category": "betterbench/math",
+   "id": "math-multistep-long",
+   "tokens": 79,
+   "mean_logprob": -1.7888736466883057,
+   "ppl": 5.982710024660977
+  },
+  {
+   "category": "betterbench/prose",
+   "id": "prose-story-long",
+   "tokens": 33,
+   "mean_logprob": -2.433451771228151,
+   "ppl": 11.398158089251613
+  },
+  {
+   "category": "betterbench/prose",
+   "id": "prose-continue-medium",
+   "tokens": 56,
+   "mean_logprob": -2.5430812407620187,
+   "ppl": 12.718800342427572
+  },
+  {
+   "category": "betterbench/prose",
+   "id": "prose-style-edit",
+   "tokens": 61,
+   "mean_logprob": -3.43309151024947,
+   "ppl": 30.972245910138703
+  },
+  {
+   "category": "betterbench/reasoning",
+   "id": "reason-plan-medium",
+   "tokens": 70,
+   "mean_logprob": -1.601622567281759,
+   "ppl": 4.961075576265347
+  },
+  {
+   "category": "betterbench/reasoning",
+   "id": "reason-causal-medium",
+   "tokens": 43,
+   "mean_logprob": -2.4345449503554506,
+   "ppl": 11.410625130877735
+  },
+  {
+   "category": "betterbench/reasoning",
+   "id": "reason-longform",
+   "tokens": 52,
+   "mean_logprob": -2.2642620470626125,
+   "ppl": 9.624019906208206
+  },
+  {
+   "category": "betterbench/reasoning",
+   "id": "reason-quick",
+   "tokens": 37,
+   "mean_logprob": -1.2956067109062133,
+   "ppl": 3.653211745315624
+  },
+  {
+   "category": "betterbench/summarization",
+   "id": "summ-short-out",
+   "tokens": 90,
+   "mean_logprob": -3.7484372798922574,
+   "ppl": 42.45468534342576
+  },
+  {
+   "category": "betterbench/summarization",
+   "id": "summ-tldr",
+   "tokens": 60,
+   "mean_logprob": -2.0058503551442604,
+   "ppl": 7.432411399584523
+  },
+  {
+   "category": "betterbench/summarization",
+   "id": "summ-keypoints-medium",
+   "tokens": 151,
+   "mean_logprob": -2.843042177816148,
+   "ppl": 17.16791402163186
+  },
+  {
+   "category": "prose/cookbook",
+   "id": "DRAFT-INT4-S-M1.md#0",
+   "tokens": 718,
+   "mean_logprob": -2.4640293731408103,
+   "ppl": 11.752069739738966
+  },
+  {
+   "category": "prose/cookbook",
+   "id": "DRAFT-INT4-S-M1.md#1",
+   "tokens": 905,
+   "mean_logprob": -2.06264264069771,
+   "ppl": 7.866731309961738
+  },
+  {
+   "category": "prose/cookbook",
+   "id": "DRAFT-INT4-S-M1.md#2",
+   "tokens": 979,
+   "mean_logprob": -1.6451965431592501,
+   "ppl": 5.182028299079449
+  },
+  {
+   "category": "prose/cookbook",
+   "id": "QWEN38-VLLM-XPU.md#0",
+   "tokens": 614,
+   "mean_logprob": -2.3499481419026034,
+   "ppl": 10.48502597713051
+  },
+  {
+   "category": "prose/cookbook",
+   "id": "QWEN38-VLLM-XPU.md#1",
+   "tokens": 587,
+   "mean_logprob": -2.6541937727678686,
+   "ppl": 14.213522110087796
+  },
+  {
+   "category": "prose/cookbook",
+   "id": "QWEN38-VLLM-XPU.md#2",
+   "tokens": 588,
+   "mean_logprob": -2.5332281049682575,
+   "ppl": 12.59409565055532
+  },
+  {
+   "category": "prose/cookbook",
+   "id": "README.md#0",
+   "tokens": 539,
+   "mean_logprob": -2.2375313292745735,
+   "ppl": 9.37017084499466
+  },
+  {
+   "category": "prose/cookbook",
+   "id": "README.md#1",
+   "tokens": 151,
+   "mean_logprob": -3.4843718237364536,
+   "ppl": 32.60194091063544
+  },
+  {
+   "category": "prose/cookbook",
+   "id": "SOURCE.md#0",
+   "tokens": 418,
+   "mean_logprob": -2.121891795621449,
+   "ppl": 8.346913214629199
+  },
+  {
+   "category": "code/python",
+   "id": "cli.py#0",
+   "tokens": 478,
+   "mean_logprob": -1.1340561541625325,
+   "ppl": 3.108238460057773
+  },
+  {
+   "category": "code/python",
+   "id": "cli.py#1",
+   "tokens": 467,
+   "mean_logprob": -1.544984427318585,
+   "ppl": 4.687898623301817
+  },
+  {
+   "category": "code/python",
+   "id": "client.py#0",
+   "tokens": 406,
+   "mean_logprob": -1.8500539421987432,
+   "ppl": 6.360162594503434
+  },
+  {
+   "category": "code/python",
+   "id": "client.py#1",
+   "tokens": 501,
+   "mean_logprob": -1.7830040752757945,
+   "ppl": 5.947696937361155
+  },
+  {
+   "category": "code/python",
+   "id": "config.py#0",
+   "tokens": 520,
+   "mean_logprob": -1.2139475744195156,
+   "ppl": 3.3667489464481424
+  },
+  {
+   "category": "code/python",
+   "id": "config.py#1",
+   "tokens": 238,
+   "mean_logprob": -1.2646904675466506,
+   "ppl": 3.5419962036368777
+  },
+  {
+   "category": "code/python",
+   "id": "corpus.py#0",
+   "tokens": 455,
+   "mean_logprob": -0.97553308341901,
+   "ppl": 2.6525808810323586
+  },
+  {
+   "category": "code/python",
+   "id": "corpus.py#1",
+   "tokens": 336,
+   "mean_logprob": -0.8575057832737771,
+   "ppl": 2.3572738034188303
+  },
+  {
+   "category": "json/catalog",
+   "id": "benchmarks#0",
+   "tokens": 797,
+   "mean_logprob": -1.498203373739302,
+   "ppl": 4.473644378877912
+  },
+  {
+   "category": "json/catalog",
+   "id": "benchmarks#1",
+   "tokens": 820,
+   "mean_logprob": -1.1449857012443136,
+   "ppl": 3.142396424159188
+  },
+  {
+   "category": "json/catalog",
+   "id": "benchmarks#2",
+   "tokens": 823,
+   "mean_logprob": -1.1171888231296532,
+   "ppl": 3.0562504550408423
+  }
+ ]
+}

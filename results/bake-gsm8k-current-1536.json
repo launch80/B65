@@ -1,0 +1,714 @@
+{
+ "n": 100,
+ "correct": 89,
+ "accuracy": 89.0,
+ "ci95": [
+  81.36853697209699,
+  93.74586804477487
+ ],
+ "truncated": 10,
+ "seed": 608,
+ "max_tokens": 1536,
+ "records": [
+  {
+   "i": 0,
+   "gold": 11.0,
+   "got": 11.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 1,
+   "gold": 2000.0,
+   "got": 2000.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 2,
+   "gold": 4000.0,
+   "got": 4000.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 3,
+   "gold": 28.0,
+   "got": 28.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 4,
+   "gold": 50.0,
+   "got": 50.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 5,
+   "gold": 40.0,
+   "got": 40.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 6,
+   "gold": 17500.0,
+   "got": 17500.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 7,
+   "gold": 78.0,
+   "got": 78.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 8,
+   "gold": 6.0,
+   "got": 6.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 9,
+   "gold": 50.0,
+   "got": 50.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 10,
+   "gold": 78.0,
+   "got": 78.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 11,
+   "gold": 18.0,
+   "got": 18.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 12,
+   "gold": 31800.0,
+   "got": 31800.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 13,
+   "gold": 156.0,
+   "got": 156.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 14,
+   "gold": 120.0,
+   "got": 120.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 15,
+   "gold": 6.0,
+   "got": null,
+   "hit": false,
+   "finish": "length"
+  },
+  {
+   "i": 16,
+   "gold": 105.0,
+   "got": 105.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 17,
+   "gold": 60.0,
+   "got": 60.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 18,
+   "gold": 3.0,
+   "got": null,
+   "hit": false,
+   "finish": "length"
+  },
+  {
+   "i": 19,
+   "gold": 2450.0,
+   "got": 2450.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 20,
+   "gold": 33.0,
+   "got": null,
+   "hit": false,
+   "finish": "length"
+  },
+  {
+   "i": 21,
+   "gold": 98.0,
+   "got": 98.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 22,
+   "gold": 450.0,
+   "got": 450.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 23,
+   "gold": 1240.0,
+   "got": 1240.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 24,
+   "gold": 175.0,
+   "got": 175.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 25,
+   "gold": 10.0,
+   "got": 10.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 26,
+   "gold": 227.0,
+   "got": 227.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 27,
+   "gold": 33.0,
+   "got": 33.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 28,
+   "gold": 14.0,
+   "got": 14.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 29,
+   "gold": 25.0,
+   "got": 25.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 30,
+   "gold": 50.0,
+   "got": 50.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 31,
+   "gold": 12.0,
+   "got": 12.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 32,
+   "gold": 8.0,
+   "got": null,
+   "hit": false,
+   "finish": "length"
+  },
+  {
+   "i": 33,
+   "gold": 28.0,
+   "got": 28.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 34,
+   "gold": 1210.0,
+   "got": 1210.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 35,
+   "gold": 20.0,
+   "got": 20.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 36,
+   "gold": 96.0,
+   "got": 96.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 37,
+   "gold": 880.0,
+   "got": 880.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 38,
+   "gold": 180.0,
+   "got": 180.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 39,
+   "gold": 45.0,
+   "got": 45.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 40,
+   "gold": 5.0,
+   "got": 5.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 41,
+   "gold": 8.0,
+   "got": 8.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 42,
+   "gold": 23.0,
+   "got": 23.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 43,
+   "gold": 34.0,
+   "got": 34.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 44,
+   "gold": 1600.0,
+   "got": null,
+   "hit": false,
+   "finish": "length"
+  },
+  {
+   "i": 45,
+   "gold": 17.0,
+   "got": 17.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 46,
+   "gold": 200.0,
+   "got": 200.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 47,
+   "gold": 70.0,
+   "got": 70.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 48,
+   "gold": 20.0,
+   "got": 20.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 49,
+   "gold": 10.0,
+   "got": 10.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 50,
+   "gold": 15.0,
+   "got": 15.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 51,
+   "gold": 50.0,
+   "got": 50.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 52,
+   "gold": 1.0,
+   "got": null,
+   "hit": false,
+   "finish": "length"
+  },
+  {
+   "i": 53,
+   "gold": 20.0,
+   "got": 20.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 54,
+   "gold": 12.0,
+   "got": 12.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 55,
+   "gold": 240.0,
+   "got": 240.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 56,
+   "gold": 350.0,
+   "got": 2000.0,
+   "hit": false,
+   "finish": "length"
+  },
+  {
+   "i": 57,
+   "gold": 20.0,
+   "got": 20.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 58,
+   "gold": 31.0,
+   "got": 31.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 59,
+   "gold": 12.0,
+   "got": null,
+   "hit": false,
+   "finish": "length"
+  },
+  {
+   "i": 60,
+   "gold": 66.0,
+   "got": 66.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 61,
+   "gold": 10.0,
+   "got": 10.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 62,
+   "gold": 60.0,
+   "got": 60.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 63,
+   "gold": 3528.0,
+   "got": 3528.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 64,
+   "gold": 736.0,
+   "got": 736.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 65,
+   "gold": 71.0,
+   "got": 71.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 66,
+   "gold": 6600.0,
+   "got": 6600.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 67,
+   "gold": 110.0,
+   "got": 110.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 68,
+   "gold": 92.0,
+   "got": 92.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 69,
+   "gold": 18.0,
+   "got": 18.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 70,
+   "gold": 17.0,
+   "got": 17.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 71,
+   "gold": 200.0,
+   "got": 200.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 72,
+   "gold": 4.0,
+   "got": 4.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 73,
+   "gold": 147.0,
+   "got": 147.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 74,
+   "gold": 138.0,
+   "got": 138.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 75,
+   "gold": 260.0,
+   "got": 260.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 76,
+   "gold": 40.0,
+   "got": 40.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 77,
+   "gold": 14.0,
+   "got": 14.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 78,
+   "gold": 300.0,
+   "got": 300.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 79,
+   "gold": 3.0,
+   "got": 3.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 80,
+   "gold": 76.0,
+   "got": 76.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 81,
+   "gold": 70.0,
+   "got": 70.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 82,
+   "gold": 5.0,
+   "got": 5.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 83,
+   "gold": 8.0,
+   "got": null,
+   "hit": false,
+   "finish": "length"
+  },
+  {
+   "i": 84,
+   "gold": 1800.0,
+   "got": 1800.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 85,
+   "gold": 31.0,
+   "got": 31.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 86,
+   "gold": 45.0,
+   "got": 45.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 87,
+   "gold": 15.0,
+   "got": 15.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 88,
+   "gold": 25.0,
+   "got": null,
+   "hit": false,
+   "finish": "length"
+  },
+  {
+   "i": 89,
+   "gold": 6277.0,
+   "got": 6277.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 90,
+   "gold": 27.0,
+   "got": 27.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 91,
+   "gold": 21.0,
+   "got": 21.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 92,
+   "gold": 3160.0,
+   "got": 3160.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 93,
+   "gold": 675.0,
+   "got": 600.0,
+   "hit": false,
+   "finish": "stop"
+  },
+  {
+   "i": 94,
+   "gold": 60.0,
+   "got": 60.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 95,
+   "gold": 8.0,
+   "got": 8.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 96,
+   "gold": 63.0,
+   "got": 63.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 97,
+   "gold": 10.0,
+   "got": 10.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 98,
+   "gold": 20.0,
+   "got": 20.0,
+   "hit": true,
+   "finish": "stop"
+  },
+  {
+   "i": 99,
+   "gold": 1.0,
+   "got": 1.0,
+   "hit": true,
+   "finish": "stop"
+  }
+ ]
+}
