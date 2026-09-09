@@ -80,4 +80,27 @@ stride-`(1, K/8)` view the vendor op wants. Engaged and verified.
 
 ## Throughput
 
-_pending: BetterBench with R6 engaged_
+BetterBench, single stream, MTP k=6, both arms measured the **same day on the same
+config** (vLLM 0.27.2-xpu, GDN mixed-split v5, XPU graph capture off), weighted by the
+harness's category weights:
+
+| | code | file_edit | json | math | prose | reasoning | summ. | **weighted** |
+|---|---|---|---|---|---|---|---|---|
+| current stack (patched, RTN head) | 62.7 | 86.3 | 97.7 | 87.9 | 56.8 | 61.9 | 87.5 | **71.8** |
+| baked (GPTQ head + draft on disk) | 66.0 | 83.5 | 94.0 | 88.5 | 57.9 | 61.4 | 86.3 | **71.8** |
+
+**1.00x.** The baked checkpoint is speed-neutral and quality-better, with no boot-time
+weight patches. Fixed 8-prompt workload agrees: 71.9 vs 70.6 tok/s, acceptance 38.0%
+vs 36.5%, step 45.6 vs 45.2 ms.
+
+L80 page for the baked run: https://launch80.com/a/2c20c65e-f477-4621-98d9-7df1b16646fe
+(self-reported rendering; free-tier pages expire - `results/bake-betterbench-*.json` is
+the citation of record).
+
+Two earlier numbers are superseded and should not be quoted against this: the
+09-07 baseline of 77.8 was a different config (no GDN v5, capture on), and today's
+current stack measures 71.8 on the same harness. What changed between those two
+configs was not re-measured, on instruction; the like-for-like comparison above is
+the one that stands. The first baked run at 69.2 / 67.9 was with R6 silently off.
+
+Published: https://huggingface.co/Launch80/Qwen3.8-27B-GPTQ-Int4-baked

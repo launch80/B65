@@ -1,0 +1,15 @@
+{
+ "label": "baked k=6 R6 on",
+ "m1": 1,
+ "r6": 1,
+ "k": 6,
+ "drafts": 441.0,
+ "drafted": 2646.0,
+ "accepted": 1006.0,
+ "acceptance": 0.3801965230536659,
+ "tokens_per_step": 3.2811791383219955,
+ "draft_gb": 0.306,
+ "gb_step": 15.525,
+ "gb_per_token": 4.731530753282654,
+ "observed_tok_s": 71.89833730782063
+}

@@ -32,17 +32,20 @@ bytes as a checkpoint.
 |---|---|---|---|
 | perplexity, 13,027 held-out tokens, spec off | **6.133** | 6.144 | 6.093 |
 | GSM8K n=100, 768-token budget | 82 (18 truncated) | 90 (11 truncated) | 88 (14 truncated) |
-| GSM8K n=100, 1536-token budget | **91** (8 truncated) | _pending_ | — |
+| GSM8K n=100, 1536-token budget, paired | **91** (8 truncated) | 89 (10 truncated) | — |
 | spec-on vs spec-off greedy, same weights, 8 × 48 tok | **8/8 identical** | — | — |
-| BetterBench decode, MTP k=6, weighted | _pending R6 fix_ | 77.8 | — |
+| BetterBench decode, MTP k=6, weighted, same day/config | **71.8** | 71.8 | — |
 
 Perplexity is **better** than the patched stock checkpoint it replaces (−0.19%) and +0.65%
 over the fp16 head, against a +1.5% gate. The GSM8K drop at 768 tokens is entirely
 truncation: all 10 flipped problems ran out of budget mid-reasoning, zero were wrong
 answers, and on the 80 problems both heads finished they score 80/80 each. At 1536
-tokens the baked head scores 91. The GPTQ head makes the model slightly more verbose;
-it does not make it less accurate. Draft acceptance rises from 36.5% to 50.5% on a fixed
-workload (Hessian-compensated draft vs round-to-nearest).
+tokens the paired result is baked 91 / stock 89 (McNemar 0.50, not significant). The GPTQ
+head makes the model slightly more verbose; it does not make it less accurate. Draft
+acceptance on a fixed workload: 38.0% vs 36.5% (Hessian-compensated draft vs round-to-nearest).
+
+BetterBench run page (Launch80): https://launch80.com/a/2c20c65e-f477-4621-98d9-7df1b16646fe — a self-reported rendering; free-tier pages expire,
+so the results JSON in the GitHub repo is the citation of record.
 
 Layer-wise output error on held-out activations (118k rows for `lm_head`, 207k for the
 draft), GPTQ on disk vs the RTN the boot patches used — GPTQ roughly halves it everywhere:
@@ -62,6 +65,11 @@ you still need three correctness patches from the
 nightly, MTP boundary, and `patch_gdn_mixed_split_v5.py` — without the last one the
 engine dies under any concurrent load). None of them touch weights. Turn XPU graph
 capture **off**; it is worth 0.0% on this image and slows the draft ~1%.
+
+If you also use the draft-vocab prefix (`P608_DRAFT_VOCAB`, +6% on the B65), you need the
+version of `patches/p608_lmhead_int4.py` in the repo above dated 2026-09-08 or later: on a
+GPTQ-quantized head the older one found no `.weight`, silently disabled the prefix, and
+every draft pass read the full 0.66 GB head (about −11% end to end).
 
 **Credit.** Qwen3.8-27B by Qwen (Apache-2.0). INT4 body and MTP head by SergiioB. The
 `lm_head`/draft quantization, quality gates and measurements by Launch80:
