@@ -48,11 +48,7 @@ patches roughly halves everywhere (lm_head 3.64% vs 7.58%). Details, including t
 the bake surfaced: [`docs/baked-checkpoint.md`](docs/baked-checkpoint.md). Tooling:
 [`bake/`](bake/).
 
-**In progress:** the same bake applied to
-[MikeCaldera's fresh GPTQ quant](https://huggingface.co/mikeinnyc/Qwen3.8-27B-GPTQ-Int4-sym-G128-MTP-BF16)
-of the same base model. It has the same layout, so every patch and the bake pipeline apply
-unchanged. Early single-stream indications suggest its body accepts more draft tokens;
-nothing goes in this table until it has been through BetterBench and the gates above.
+**v2, in progress (2026-09-10):** the same bake applied to [MikeCaldera's fresh GPTQ quant](https://huggingface.co/mikeinnyc/Qwen3.8-27B-GPTQ-Int4-sym-G128-MTP-BF16) of the same base model. Same INT4 g128 layout, so the pipeline ran unchanged; layer errors match v1 within 0.1 points (`lm_head` 3.60% vs 3.64%). Served as `Launch80/Qwen3.8-27B-GPTQ-Int4-baked-v2`. Single-stream indications (pi's `/bench`, not BetterBench) put it ~30% ahead of v1 at equal bytes per step, which can only be the body's draft acceptance. BetterBench is running now and the quality gates have not been run; nothing enters the table above until both are in.
 
 ## Quick start
 
