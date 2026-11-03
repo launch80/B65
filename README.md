@@ -52,6 +52,8 @@ the bake surfaced: [`docs/baked-checkpoint.md`](docs/baked-checkpoint.md). Tooli
 
 **DFlash2 drafter, INT4 (2026-10-13):** the built-in MTP draft is acceptance-bound (3.4 tokens/step on Swift-derived bodies). z-lab's DFlash2 block-diffusion drafter accepts 4.2, but its bf16 weights cost ~8 ms per step on the B65 until its linears are baked to INT4 the same way as the head: **80.5 → 96.7 tok/s** single-stream on [Launch80/Swift-1.5-Qwen3.8-27B-Uncensored-Int4-baked](https://huggingface.co/Launch80/Swift-1.5-Qwen3.8-27B-Uncensored-Int4-baked) with [Launch80/Qwen3.8-27B-DFlash2-Int4-baked-drafter](https://huggingface.co/Launch80/Qwen3.8-27B-DFlash2-Int4-baked-drafter), gates unchanged (GSM8K 94/100, greedy spec-invariant 16/16). On the fp16 XPU stack the drafter must run in bf16 (`patches/patch_dflash_mixed_dtype.py`), q/k/v must stay dense, and vLLM's quantized-module list needs index-free and fused names. 128k context with the drafter, 262k without. See [`docs/dflash2.md`](docs/dflash2.md), [`dflash/`](dflash/).
 
+**GDN verify-step host sync (2026-11-03):** with DFlash2 at k=7 a decode step carried ~7 ms of host time (~2 ms with speculation off). py-spy put it in `GDNAttentionMetadataBuilder.build`: on a pure spec-decode batch it indexes two GPU tensors with a CPU boolean mask, and a data-dependent output size makes the host wait for the device every step, which cancels async scheduling. On that path the padded sequences sit at the back, so the mask is a prefix and a slice gives the same tensors without a sync ([`patches/patch_gdn_spec_nosync.py`](patches/patch_gdn_spec_nosync.py), run after `patch_mtp_boundary.py`). Single prompt: 47.9 → 44.4 ms per step at k=7. Quick BetterBench on [Launch80/Qwopus3.8-27B-Coder-Flash-Int4-baked](https://huggingface.co/Launch80/Qwopus3.8-27B-Coder-Flash-Int4-baked) with the INT4 DFlash2 drafter, k=7, 128k: **89.3 → 92.5 and 96.0 tok/s** (two runs; quick runs vary by a few tok/s). Greedy spec-on vs spec-off: 30 of 32 outputs identical, both differences at exact top-2 ties. The INT4 GEMM still steps up at 9 query rows (oneDNN, kernel rate ~22.7 → 25.9 ms per step); a Triton W4A16 replacement ran 3.5× slower than oneDNN and was dropped.
+
 **Embed-INT8 derivative (2026-09-13):** baked-v2 still left `embed_tokens` FP16 (~2.37 GiB). An INT8-only derivative reclaims ~1.15 GiB of resident weights and returns that to FP8 KV (~65k → ~131k-class window on a 24 GiB B60) with short decode within ~1% of the FP16-embed baseline under graphs+MTP6. INT4 embed was measured and **rejected** (−21% decode). This path still needs a small boot patch (stock vLLM has no INT8 embed method). See [`docs/embed-int8.md`](docs/embed-int8.md), [`bake/bake_embed_quant.py`](bake/bake_embed_quant.py), [`patches/patch_embed_int8.py`](patches/patch_embed_int8.py).
 
 ## Quick start
@@ -212,3 +214,9 @@ this card's firmware-locked 200 W / 2400 MHz, which no software recovers. Their
 not redistributed here.**
 
 Numbers are self-reported. MIT licensed.
+
+## Community
+
+Questions, results, or a model you want tested? Join the Launch80 Discord: https://discord.gg/launch80
+
+If this work is useful to you, please support the server: https://launch80.com/supporter
